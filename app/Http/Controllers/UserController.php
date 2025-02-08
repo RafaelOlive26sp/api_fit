@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserResquest;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -29,9 +30,12 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserResquest $request)
     {
-        return 'Hello from UserController@index';
+        $this->authorize('create', User::class);
+        $validateData = $request->validated();
+
+        return User::create($validateData);
     }
 
     /**

@@ -37,7 +37,7 @@ class ClasseController extends Controller
      */
     public function show(string $id)
     {
-        return 'Detalhes da turma';
+        return 'Detalhes da turma1';
     }
 
 

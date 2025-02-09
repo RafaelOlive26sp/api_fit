@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function (){
 Route::resource('users', UserController::class)->middleware('auth:sanctum');
 Route::resource('classes', ClasseController::class)->middleware('auth:sanctum');
-Route::resource('classes/schedules', ClassSheduleController::class)->middleware('auth:sanctum');
+Route::resource('schedules', ClassSheduleController::class)->middleware('auth:sanctum');
 Route::resource('student', StudentController::class)->middleware('auth:sanctum');
 Route::resource('payment', PaymentController::class)->middleware('auth:sanctum');
 Route::resource('appointment', AppointmentController::class)->middleware('auth:sanctum');

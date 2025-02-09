@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClassSheduleController;
@@ -15,6 +16,7 @@ Route::resource('classes', ClasseController::class)->middleware('auth:sanctum');
 Route::resource('classes/schedules', ClassSheduleController::class)->middleware('auth:sanctum');
 Route::resource('student', StudentController::class)->middleware('auth:sanctum');
 Route::resource('payment', PaymentController::class)->middleware('auth:sanctum');
+Route::resource('appointment', AppointmentController::class)->middleware('auth:sanctum');
 
 });
 

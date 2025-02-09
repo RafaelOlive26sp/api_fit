@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ClassSchedulesResquest;
+use App\Http\Resources\ClassScheduleResource;
+use App\Models\Classe;
 use App\Models\ClassSchedule;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -16,7 +18,8 @@ class ClassSheduleController extends Controller
      */
     public function index()
     {
-        return 'ClassSheduleController@index';
+        $classes = ClassSchedule::with('classe')->get();
+        return ClassScheduleResource::collection($classes);
     }
 
 
@@ -35,18 +38,14 @@ class ClassSheduleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Int $id)
     {
-        //
+        $class = ClassSchedule::with('classe')->findOrFail($id);
+
+        return new ClassScheduleResource($class);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.

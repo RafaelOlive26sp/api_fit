@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserResquest;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Http\Resources\UserResource;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -41,9 +42,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        return 'Hello from UserController@index';
+
+        $this->authorize('view', $user);
+
+        return new UserResource($user);
     }
 
 

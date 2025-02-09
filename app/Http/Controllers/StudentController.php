@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentResquest;
+use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -33,18 +34,16 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
-        //
+        // dd($request->user()->id);
+        $userId = $request->user()->id;
+        $student = Student::where('users_id', $userId)->first();
+        $this->authorize('view', $student);
+        return new StudentResource($student);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.

@@ -19,9 +19,9 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, User $model): bool
+    public function view(User $user, User $currentUser): bool
     {
-        return false;
+        return in_array($user->role,['admin','teacher']) || $user->id === $currentUser->id;
     }
 
     /**

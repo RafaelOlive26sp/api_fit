@@ -2,11 +2,12 @@
 
 namespace App\Policies;
 
+use Illuminate\Auth\Access\Response;
+use App\Models\Payment;
 use App\Models\Student;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
-class StudentPolicy
+class PaymentPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,10 +20,10 @@ class StudentPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Student $student): bool
+    public function view( Payment $payment, Student $student): bool
     {
-        ;
-        return in_array($user->role, ['admin', 'teacher']) || $user->id === $student->users_id;
+
+        return  $payment->students_id === $student->id;
 
     }
 
@@ -30,14 +31,14 @@ class StudentPolicy
      * Determine whether the user can create models.
      */
     public function create(User $user): bool
-{
-    return in_array($user->role, ['admin', 'teacher']) || Student::where('users_id', $user->id)->exists();
-}
+    {
+        return false;
+    }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Student $student): bool
+    public function update(User $user, Payment $payment): bool
     {
         return false;
     }
@@ -45,7 +46,7 @@ class StudentPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Student $student): bool
+    public function delete(User $user, Payment $payment): bool
     {
         return false;
     }
@@ -53,7 +54,7 @@ class StudentPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Student $student): bool
+    public function restore(User $user, Payment $payment): bool
     {
         return false;
     }
@@ -61,7 +62,7 @@ class StudentPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Student $student): bool
+    public function forceDelete(User $user, Payment $payment): bool
     {
         return false;
     }

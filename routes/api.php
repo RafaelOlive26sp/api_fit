@@ -17,6 +17,7 @@ Route::resource('schedules', ClassSheduleController::class)->middleware('auth:sa
 Route::resource('student', StudentController::class)->middleware('auth:sanctum');
 Route::resource('payment', PaymentController::class)->middleware('auth:sanctum');
 Route::resource('appointment', AppointmentController::class)->middleware('auth:sanctum');
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 });
 

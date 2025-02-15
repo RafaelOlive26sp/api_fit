@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function Pest\Laravel\json;
 
 class AuthController extends Controller
 {
@@ -13,10 +16,31 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
            $user = Auth::user();
            $token = $user->createToken('auth_token')->plainTextToken;
-           return response()->json([
-               'access_token' => $token,
-               'token_type' => 'Bearer',
-           ]);
+           $isStudent = Student::where('users_id',$user->id)->exists();
+
+            if ($isStudent)
+            {
+                return response()->json([
+                    'access_token' => $token,
+                    'token_type' => 'Bearer',
+                    'user'=>[
+                        'name'=> $user->name,
+                        'CompleteStudentRecord'=>$isStudent
+                    ]
+                ]);
+            }else
+            {
+                return response()->json([
+                    'access_token' => $token,
+                    'token_type' => 'Bearer',
+                    'user'=>[
+                        'name'=> $user->name,
+                        'CompleteStudentRecord'=>$isStudent
+                    ]
+                ]);
+            }
+
+
         }
         return  response()->json([
             'message' => 'Unauthorized'

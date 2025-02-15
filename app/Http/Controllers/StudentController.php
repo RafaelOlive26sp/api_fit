@@ -36,7 +36,7 @@ class StudentController extends Controller
      */
     public function show(Request $request)
     {
-        // dd($request->user()->id);
+
         $userId = $request->user()->id;
         $student = Student::where('users_id', $userId)->first();
         $this->authorize('view', $student);

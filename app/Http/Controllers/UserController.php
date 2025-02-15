@@ -33,7 +33,7 @@ class UserController extends Controller
      */
     public function store(UserResquest $request)
     {
-        $this->authorize('create', User::class);
+//        $this->authorize('create', User::class);
         $validateData = $request->validated();
 
         return User::create($validateData);

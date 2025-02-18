@@ -27,6 +27,7 @@ class AppointmentController extends Controller
      */
     public function store(AppointmentRequest $request)
     {
+
         $validateData = $request->validated();
 
         return Appointment::create($validateData);

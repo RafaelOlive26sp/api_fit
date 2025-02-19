@@ -28,6 +28,7 @@ class AppointmentResource extends JsonResource
                     'currently_praticing' => $this->student->currently_praticing,
                 ]:null,
                 'class_schedule_id' => $this->class_schedule ?[
+                    'date' => $this->class_schedule->date,
                     'day_of_week' => $this->class_schedule->day_of_week,
                     'start_time' => $this->class_schedule->start_time,
                     'end_time' => $this->class_schedule->end_time,

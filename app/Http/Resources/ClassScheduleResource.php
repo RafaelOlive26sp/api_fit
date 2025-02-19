@@ -16,6 +16,7 @@ class ClassScheduleResource extends JsonResource
     {
         return
         [
+            'date'=> $this->date,
             'day_of_week'=> $this->day_of_week,
             'start_time'=> $this->start_time,
             'end_time'=> $this->end_time,

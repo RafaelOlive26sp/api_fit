@@ -9,6 +9,7 @@ use App\Models\Appointment;
 use App\Models\Student;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -38,18 +39,36 @@ class AppointmentController extends Controller
      */
     public function show(string $id)
     {
-        // $userId = auth()->user()->id;
-        // $studentUser = Student::where('users_id', $userId);
+        $userId = Auth::id();
 
-        // $this->authorize('view', $studentUser);
-        // Falta configurar a Policy
+        $student = Student::where('users_id', $userId)->first();
+//        dd($student->id);
 
-
-         return new AppointmentResource(
-            Appointment::where('id', $id)
+        if(!$student){
+            abort(404, 'Nenhum aluno encontrado.');
+        }
+        $appointment = Appointment::where('students_id', $student->id)
             ->with(['class_schedule.classe', 'payment', 'student'])
-            ->firstOr(fn() => abort(404, 'Nenhum agendamento encontrado.'))
-         );
+            ->get();
+
+        if ($appointment->isEmpty()) {
+            return response()->json([
+                'message' => 'Nenhum agendamento encontrado para o estudante.'
+            ], 404);
+        }
+
+
+
+        return AppointmentResource::collection($appointment);
+
+
+
+
+//         return new AppointmentResource(
+//            Appointment::where('id', $id)->where('students_id', $student->id)
+//            ->with(['class_schedule.classe', 'payment', 'student'])
+//            ->firstOr(fn() => abort(404, 'Nenhum agendamento encontrado.'))
+//         );
 
     }
 

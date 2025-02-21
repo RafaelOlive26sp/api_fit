@@ -47,11 +47,15 @@ class PaymentController extends Controller
     public function show(string $id)
     {
 
-        $student = Student::findOrFail($id);
+        $student = Student::where('users_id', $id)->first();
+
+
 
 
         $this->authorize('view', $student);
-        $paymentUserId = Payment::where('students_id', $id)->first();
+        $paymentUserId = Payment::where('students_id', $student->id)->first();
+
+
         return new PaymentResource($paymentUserId);
     }
 

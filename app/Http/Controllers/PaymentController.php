@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\Student;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isEmpty;
 
 class PaymentController extends Controller
 {
@@ -57,14 +58,33 @@ class PaymentController extends Controller
 
         $this->authorize('view', $student);
 
-        if (!$student) {
-            return response()->json(['message'=>'pagamento nao encontrado']);
-        }
+
         $paymentUserId = Payment::where('students_id', $student->id)->get();
 
-        if(!$paymentUserId){
-            return response()->json(['message'=>'pagamento nao encontrado'],404);
+
+        if ($paymentUserId->isEmpty()) {
+            return response()->json(['message' => 'pagamento nao encontrado'], 404);
         }
+        $recentPayment = Payment::where('students_id', $student->id)
+            ->orderBy('created_at', 'desc') // Ordena por data de criação, da mais recente para a mais antiga
+            ->first();
+
+        if ($recentPayment && $recentPayment->status === 'overdue') {
+            // Casos em que o pagamento mais recente está com status "overdue"
+            $paymentOverDue = Payment::where('status', 'overdue')
+                ->where('students_id', $student->id)
+                ->get();
+
+            $paymentOverDue = PaymentResource::collection($paymentOverDue);
+
+            return response()->json([
+                'message' => 'Existe pagamento atrasado',
+                'paymentOverDue' => $paymentOverDue,
+            ], 404);
+        }
+
+
+
 
         return  PaymentResource::collection($paymentUserId);
     }

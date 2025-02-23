@@ -49,14 +49,24 @@ class PaymentController extends Controller
 
         $student = Student::where('users_id', $id)->first();
 
+        if(!$student){
+           return response()->json(['message'=>'aluno nao encontrado'], 404);
+        }
 
 
 
         $this->authorize('view', $student);
-        $paymentUserId = Payment::where('students_id', $student->id)->first();
 
+        if (!$student) {
+            return response()->json(['message'=>'pagamento nao encontrado']);
+        }
+        $paymentUserId = Payment::where('students_id', $student->id)->get();
 
-        return new PaymentResource($paymentUserId);
+        if(!$paymentUserId){
+            return response()->json(['message'=>'pagamento nao encontrado'],404);
+        }
+
+        return  PaymentResource::collection($paymentUserId);
     }
 
     /**

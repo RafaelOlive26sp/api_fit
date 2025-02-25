@@ -51,7 +51,7 @@ class PaymentController extends Controller
         $student = Student::where('users_id', $id)->first();
 
         if(!$student){
-           return response()->json(['message'=>'aluno nao encontrado'], 404);
+           return response()->json(['message'=>'O usuario nao concluiu o cadastro de aluno'], 404);
         }
 
 

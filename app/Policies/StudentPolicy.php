@@ -21,7 +21,7 @@ class StudentPolicy
      */
     public function view(User $user, Student $student): bool
     {
-        ;
+
         return in_array($user->role, ['admin', 'teacher']) || $user->id === $student->users_id;
 
     }
@@ -30,9 +30,11 @@ class StudentPolicy
      * Determine whether the user can create models.
      */
     public function create(User $user): bool
-{
+    {
+        // dd($user);
     return in_array($user->role, ['admin', 'teacher']) || Student::where('users_id', $user->id)->exists();
-}
+
+    }
 
     /**
      * Determine whether the user can update the model.

@@ -16,7 +16,9 @@ class AppointmentRequest extends FormRequest
 
     public function prepareForValidation(): void
     {
-        $student = auth()->user()->student->first(); // Obtém o estudante associado ao usuário autenticado
+        $student = auth()->user()->student; // Obtém o estudante associado ao usuário autenticado
+
+
 
 
         if ($student) {

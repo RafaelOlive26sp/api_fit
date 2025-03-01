@@ -35,6 +35,7 @@ class AuthController extends Controller
                     'access_token' => $token,
                     'token_type' => 'Bearer',
                     'user'=>[
+                        'id' => false,
                         'name'=> $user->name,
                         'CompleteStudentRecord'=>$isStudent
                     ]

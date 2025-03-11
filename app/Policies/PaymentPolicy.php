@@ -14,7 +14,8 @@ class PaymentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        // return false;
+        return in_array($user->role, ['admin', 'teacher']);
     }
 
     /**

@@ -8,6 +8,8 @@ use App\Models\Payment;
 use App\Models\Student;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+
+use function Laravel\Prompts\select;
 use function PHPUnit\Framework\isEmpty;
 
 class PaymentController extends Controller
@@ -19,7 +21,11 @@ class PaymentController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Payment::class);
-        return 'estamos em index';
+        $payments = Payment::with(['student.users:id,name,email'])->
+        select('status', 'amount', 'due_date', 'students_id')->get();
+            dd($payments);
+        return PaymentResource::collection($payments);
+
     }
 
     /**

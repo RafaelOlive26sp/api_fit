@@ -18,7 +18,8 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('viewAny', Payment::class);
+        return 'estamos em index';
     }
 
     /**

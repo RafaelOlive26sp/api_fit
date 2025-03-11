@@ -19,6 +19,13 @@ class PaymentResource extends JsonResource
             'amount' =>$this->amount,
             'status' =>$this->status,
             'due_date' =>$this->due_date,
+                'students_id' => $this->students_id && $this->student ?[
+                    'users_id' => $this->student->users_id,
+                ]:null,
+                'users_id' =>$this->users_id && $this->users ?[
+                    'name' => $this->users->name,
+                    'email' => $this->users->email,
+                ]:null,
         ];
     }
 }

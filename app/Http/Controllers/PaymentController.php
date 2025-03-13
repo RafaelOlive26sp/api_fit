@@ -21,9 +21,10 @@ class PaymentController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Payment::class);
-        $payments = Payment::with(['student.users:id,name,email'])->
-        select('status', 'amount', 'due_date', 'students_id')->get();
-            dd($payments);
+        $payments = Payment::with([
+            'student.user:id,name' // Carrega o usuário associado ao aluno
+        ])->select('id', 'status', 'amount', 'due_date', 'students_id')->get();
+        // dd($payments);
         return PaymentResource::collection($payments);
 
     }

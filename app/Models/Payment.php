@@ -11,7 +11,7 @@ class Payment extends Model
 
     public function student()
     {
-        return $this->hasOne(Student::class,'students_id');
+        return $this->hasOne(Student::class,'id','students_id');
     }
     public function appointment()
     {

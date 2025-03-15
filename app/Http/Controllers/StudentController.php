@@ -18,12 +18,10 @@ class StudentController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Student::class);
         $student = Student::with(['user:id,name'])
                 ->select('age','height','weight','gender','medical_condition','users_id')->get();
-
         return StudentWithUserResources::collection($student);
-
-
     }
 
 

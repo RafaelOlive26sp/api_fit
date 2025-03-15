@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentResquest;
 use App\Http\Resources\StudentResource;
+use App\Http\Resources\StudentWithUserResources;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -20,9 +21,9 @@ class StudentController extends Controller
         $student = Student::with(['user:id,name'])
                 ->select('age','height','weight','gender','medical_condition','users_id')->get();
 
+        return StudentWithUserResources::collection($student);
 
 
-        return 'estamos na index de student';
     }
 
 

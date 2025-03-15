@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     protected $fillable = [
-        'age','height','weight','gender','smoker','medical_condition','previous_experience','currently_praticing','users_id'
+        'age','height','weight','gender','smoker','medical_condition','previous_experience','currently_praticing','users_id','id'
     ];
 
     public function user()

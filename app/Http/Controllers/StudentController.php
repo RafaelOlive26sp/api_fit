@@ -17,7 +17,12 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $student = Student::with(['user:id,name'])
+                ->select('age','height','weight','gender','medical_condition','users_id')->get();
+
+
+
+        return 'estamos na index de student';
     }
 
 

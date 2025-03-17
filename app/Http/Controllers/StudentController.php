@@ -20,7 +20,7 @@ class StudentController extends Controller
     {
         $this->authorize('viewAny', Student::class);
         $student = Student::with(['user:id,name'])
-                ->select('age','height','weight','gender','medical_condition','users_id')->get();
+                ->select('age','height','weight','gender','medical_condition','users_id')->paginate(5);
         return StudentWithUserResources::collection($student);
     }
 

@@ -45,7 +45,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return false;
+        return in_array($user->role, ['admin', 'teacher']);
     }
 
     /**

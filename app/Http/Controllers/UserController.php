@@ -6,6 +6,7 @@ use App\Http\Requests\UserResquest;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -65,6 +66,19 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        return 'Hello from UserController@index';
+        $user = User::findOrFail($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $this->authorize('delete', $user);
+
+        DB::transaction(function () use ($user) {
+            $user->tokens()->delete();
+        });
+
+        $user->delete();
+        return response()->json(['message' => 'User deleted successfully'], 200);
     }
 }

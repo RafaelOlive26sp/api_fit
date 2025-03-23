@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserResquest;
+use App\Http\Resources\UserAdministrationResource;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Resources\UserResource;
@@ -24,7 +26,9 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 403);
 
         }
-        return 'Hello from UserController@index';
+
+        $incompleteStudents = User::doesntHave('student')->get();
+        return UserAdministrationResource::collection($incompleteStudents);
     }
 
 

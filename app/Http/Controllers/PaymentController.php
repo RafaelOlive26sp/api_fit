@@ -44,7 +44,7 @@ class PaymentController extends Controller
     {
 
 
-        $this->authorize('create',  Student::class);
+        // $this->authorize('create',  Student::class);
         $validateData = $request->validated();
 
         return Payment::create($validateData);

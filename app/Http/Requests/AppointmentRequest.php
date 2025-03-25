@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Student;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AppointmentRequest extends FormRequest
@@ -16,14 +17,19 @@ class AppointmentRequest extends FormRequest
 
     public function prepareForValidation(): void
     {
-        $student = auth()->user()->student; // Obtém o estudante associado ao usuário autenticado
+        // $student = auth()->user()->student; // Obtém o estudante associado ao usuário autenticado
+        $studentId = $this->route('id'); // Obtém o ID do estudante a partir da rota
 
-
-
+        if ($studentId) {
+            $student = Student::find($studentId); // Obtém o estudante a partir do ID
+        } else {
+            abort(403, 'Nenhum aluno encontrado.'); // Tratamento de erro
+        }
 
         if ($student) {
-            $payment = $student->payment()->latest()->first(); // Obtém o pagamento mais recente associado ao estudante
-
+            $payment = $student->payment()->where('students_id', $student->id)->latest()->first(); // Obtém o pagamento válido mais recente associado ao estudante
+            // $payment = $student->payment();
+            // dd($student->id, $payment);
             $this->merge([
                 'date' => date('Y-m-d ', strtotime($this->date)), // Converte a data
                 'status' => 'scheduled',                             // Define o status padrão

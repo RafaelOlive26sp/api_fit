@@ -19,20 +19,34 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        $appointment = Appointment::all();
+        dd($appointment);
     }
 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AppointmentRequest $request)
+    public function store(AppointmentRequest $request, $id = null)
     {
+        $user = $request->user();
 
+        // Verifica se o usuário é um administrador
+        if ($user->can('create', Appointment::class) && $id) {
+           abort(403, 'Você não tem permissão para criar um agendamento.');
+        }
 
-        $this->authorize('create',  Student::class);
+        $student = Student::find($id);
+        if(!$student){
+            abort(404, 'Nenhum aluno encontrado.');
+        }
 
         $validateData = $request->validated();
+        $validateData['students_id'] = $student->id;
+        $validateData['users_id'] = $user->id;
+
+        // dd($validateData);
+
 
         return Appointment::create($validateData);
     }
@@ -45,7 +59,7 @@ class AppointmentController extends Controller
         $userId = Auth::id();
 
         $student = Student::where('users_id', $userId)->first();
-//        dd($student->id);
+       dd($student->id);
 
         if(!$student){
             abort(404, 'Nenhum aluno encontrado.');

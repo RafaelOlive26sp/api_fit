@@ -41,8 +41,9 @@ class StudentController extends Controller
         $validateData = $request->validated();
         $validateData['users_id'] = $userId;
 
+        Student::create($validateData);
 
-        return Student::create($validateData);
+        return response()->json(['message' => 'Profile completed with success','status' => 201], 201);
     }
 
     /**

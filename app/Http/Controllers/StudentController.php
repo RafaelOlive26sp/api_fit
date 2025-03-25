@@ -28,9 +28,19 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StudentResquest $request)
+    public function store(StudentResquest $request, $id = null)
     {
+        $user = $request->user();
+
+        if($user->can('create', Student::class)&& $id){
+            $userId = $id;
+        }else{
+            $userId = $user->id;
+        }
+
         $validateData = $request->validated();
+        $validateData['users_id'] = $userId;
+
 
         return Student::create($validateData);
     }

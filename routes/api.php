@@ -19,6 +19,7 @@ Route::resource('payment', PaymentController::class)->middleware('auth:sanctum')
 Route::resource('appointment', AppointmentController::class)->middleware('auth:sanctum');
 Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
 Route::post('student/{id?}',[StudentController::class,'store'])->middleware('auth:sanctum');
+Route::post('appointment/{id?}',[AppointmentController::class,'store'])->middleware('auth:sanctum');
 Route::post('register',[UserController::class,'store']);
 });
 

@@ -32,7 +32,8 @@ class StudentPolicy
     public function create(User $user): bool
     {
         // dd($user);
-    return in_array($user->role, ['admin', 'teacher']) || Student::where('users_id', $user->id)->exists();
+    // return in_array($user->role, ['admin', 'teacher']) || Student::where('users_id', $user->id)->exists();
+        return in_array($user->role, ['admin', 'teacher']);
 
     }
 

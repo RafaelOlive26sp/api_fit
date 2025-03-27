@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Student;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PaymentResquest extends FormRequest
@@ -15,8 +16,10 @@ class PaymentResquest extends FormRequest
     }
     public function prepareForValidation()
     {
-        $student = auth()->user()->student;
-
+//            dd(request()->all());
+        $userId = $this->input('userId');
+        $student =  $userId ? Student::where('users_id', $userId )->first() : auth()->user()->student;
+//            dd($student);
         if (!$student) {
             abort(422, 'Nenhum estudante associado ao usuário autenticado.');
         }

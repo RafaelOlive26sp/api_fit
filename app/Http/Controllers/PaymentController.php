@@ -40,12 +40,23 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PaymentResquest $request)
+    public function store(PaymentResquest $request, $id = null)
     {
 
+        $user = $request->user();
+        if ($user->can('create', Payment::class) && $id) {
+            $userId = $id;
+        } else {
+            // $student = Student::where('users_id', $user->id)->first();
+            // if (!$student) {
+            //     return response()->json(['message' => 'O usuario nao concluiu o cadastro de aluno'], 404);
+            // }
+            $userId = $user->id;
+        }
 
         // $this->authorize('create',  Student::class);
         $validateData = $request->validated();
+        $validateData['students_id'] = $userId;
 
         return Payment::create($validateData);
     }

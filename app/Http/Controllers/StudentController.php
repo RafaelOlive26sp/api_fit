@@ -19,9 +19,20 @@ class StudentController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Student::class);
-        $student = Student::with(['user:id,name'])
-                ->select('age','height','weight','gender','medical_condition','users_id')->paginate(5);
-        return StudentWithUserResources::collection($student);
+//        $student = Student::with(['user:id,name'])
+//                ->select('age','height','weight','gender','medical_condition','users_id')->paginate(5);
+        $students = Student::with([
+                'user:id,name', // Carrega o usuário associado ao aluno
+                'payment'=> function ($query) {
+                    $query->select('status', 'amount', 'due_date', 'students_id')
+                    ->orderBy('due_date','desc')
+                    ->limit(1);
+                }
+        ])->select('id', 'age', 'height', 'weight', 'gender', 'medical_condition', 'users_id')->paginate(5);
+
+
+//        dd($student);
+        return StudentWithUserResources::collection($students);
     }
 
 

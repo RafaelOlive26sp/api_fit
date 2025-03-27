@@ -41,7 +41,7 @@ class PaymentResquest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => ['required', 'numeric'],
+            'amount' => ['required', 'numeric','min:50'],
             'status' => ['required', 'string'],
             'due_date' => ['required', 'date'],
             'students_id' => ['required', 'exists:students,id'],

@@ -44,19 +44,27 @@ class PaymentController extends Controller
     {
 
         $user = $request->user();
+
+
         if ($user->can('create', Payment::class) && $id) {
-            $userId = $id;
+            $student = Student::where('users_id', $id)->first();
+            if (!$student) {
+                return response()->json(['message' => 'O usuário não concluiu o cadastro de aluno'], 404);
+            }
+            $userId = $student->id;
         } else {
-            // $student = Student::where('users_id', $user->id)->first();
-            // if (!$student) {
-            //     return response()->json(['message' => 'O usuario nao concluiu o cadastro de aluno'], 404);
-            // }
-            $userId = $user->id;
+            $student = Student::where('users_id', $user->id)->first();
+            if (!$student) {
+                return response()->json(['message' => 'O usuário não concluiu o cadastro de aluno'], 404);
+            }
+            $userId = $student->id;
         }
 
-        // $this->authorize('create',  Student::class);
+
         $validateData = $request->validated();
         $validateData['students_id'] = $userId;
+
+//        dd($validateData);
 
         return Payment::create($validateData);
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PaymentResquest;
+use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
 use App\Models\Student;
@@ -116,20 +117,21 @@ class PaymentController extends Controller
         return  PaymentResource::collection($paymentUserId);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePaymentRequest $request, string $id)
     {
-        //
+
+        $payment = Payment::find($id);
+
+        $this->authorize('update', $payment);
+        $data = $request->validated();
+        $payment->update($data);
+
+        return response()->json($payment);
     }
 
     /**

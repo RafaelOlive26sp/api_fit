@@ -125,13 +125,20 @@ class PaymentController extends Controller
     public function update(UpdatePaymentRequest $request, string $id)
     {
 
-        $payment = Payment::find($id);
+
+        $payment = Payment::where('students_id', $id)->first();
+
+        if(!$payment){
+            return response()->json(['message'=>'O pagamento nao existe '], 404);
+        }
+
 
         $this->authorize('update', $payment);
         $data = $request->validated();
+//            dd($data);
         $payment->update($data);
 
-        return response()->json($payment);
+        return response()->json(['message' => 'Pagamento atualizado com sucesso', 'status' => 200]);
     }
 
     /**

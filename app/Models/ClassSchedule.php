@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ClassSchedule extends Model
 {
   protected $fillable = [
-      'day_of_week','start_time','end_time','classes_id','date'
+      'id','date','status','start_time','end_time','classes_id'
   ];
   public function classe()
   {

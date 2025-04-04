@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AppointmentRequest;
-use App\Http\Resources\AppointmentResource;
+
+
+use App\Http\Requests\ClassSchePatternRequest;
+
 use App\Models\Appointment;
+use App\Models\ClassSchedulesPattern;
 use App\Models\Student;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -27,28 +30,30 @@ class AppointmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AppointmentRequest $request, $id = null)
+    public function store(ClassSchePatternRequest $request)
     {
-        $user = $request->user();
 
+        // $user = $request->user();
+        // dd($request->all());
         // Verifica se o usuário é um administrador
-        if ($user->can('create', Appointment::class) && $id) {
-           abort(403, 'Você não tem permissão para criar um agendamento.');
-        }
+        // if ($user->can('create', ClassSchedulesPattern::class) && $id) {
+            //    abort(403, 'Você não tem permissão para criar um agendamento.');
+            // }
 
-        $student = Student::find($id);
-        if(!$student){
-            abort(404, 'Nenhum aluno encontrado.');
-        }
+            // $student = Student::find($id);
+            // if(!$student){
+                //     abort(404, 'Nenhum aluno encontrado.');
+                // }
+                // $this->authorize('create', ClassSchedulesPattern::class);
+                // $validateData = $request->validated();
+                // $validateData['students_id'] = $student->id;
+                // $validateData['users_id'] = $user->id;
 
-        $validateData = $request->validated();
-        $validateData['students_id'] = $student->id;
-        $validateData['users_id'] = $user->id;
-
-        // dd($validateData);
+                $validateData = $request->validated();
+                // dd($validateData);
 
 
-        return Appointment::create($validateData);
+        return ClassSchedulesPattern::create($validateData);
     }
 
     /**

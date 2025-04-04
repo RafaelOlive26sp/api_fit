@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Classe extends Model
 {
     protected $fillable = [
-        'name','max_students','schedule','level','class_id'
+        'name','max_students','level'
     ];
     protected $casts = [
         'schedule' => 'array'
@@ -16,4 +16,25 @@ class Classe extends Model
     {
         return $this->hasMany(ClassSchedule::class,'classes_id','id');
     }
+    public function class_schedules_pattern()
+    {
+        return $this->hasMany(ClassSchedulesPattern::class,'classes_id','id');
+    }
+   // Relacionamento com StudentClass
+   public function students()
+   {
+       return $this->hasMany(StudentClass::class, 'classes_id', 'id');
+   }
+
+   // Relacionamento com ClassSchedulesPatterns
+   public function schedulesPatterns()
+   {
+       return $this->hasMany(ClassSchedulesPattern::class, 'classes_id', 'id');
+   }
+
+   // Relacionamento com ClassSchedules (aulas extras)
+   public function extraClasses()
+   {
+       return $this->hasMany(ClassSchedule::class, 'classes_id', 'id');
+   }
 }

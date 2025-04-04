@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClassSheduleController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\StudentClassesController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum
 Route::post('student/{id?}',[StudentController::class,'store'])->middleware('auth:sanctum');
 Route::post('appointment/{id?}',[AppointmentController::class,'store'])->middleware('auth:sanctum');
 Route::post('payment/{id?}',[PaymentController::class,'store'])->middleware('auth:sanctum');
+Route::post('class/register',[StudentClassesController::class,'store'])->middleware('auth:sanctum');
 Route::post('register',[UserController::class,'store']);
 });
 

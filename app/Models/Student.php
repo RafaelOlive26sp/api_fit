@@ -14,9 +14,9 @@ class Student extends Model
     {
         return $this->belongsTo(User::class,'users_id','id');
     }
-    public function appointment()
+    public function studentClass()
     {
-        return $this->hasMany(Appointment::class,'students_id');
+        return $this->hasMany(StudentClass::class,'students_id', 'id');
     }
     public function payment()
     {

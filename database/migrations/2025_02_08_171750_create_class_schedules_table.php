@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('class_schedules', function (Blueprint $table) {
             $table->id();
-            $table->string('day_of_week',20);
+            $table->date('date')->nullable();
+            $table->enum('status', ['scheduled', 'cancelled', 'rescheduled'])->default('scheduled')->nullable();
             $table->time('start_time');
             $table->time('end_time');
             $table->foreignId('classes_id')->constrained('classes')->onDelete('cascade');

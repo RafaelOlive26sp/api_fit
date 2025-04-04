@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name',45);
             $table->integer('max_students');
-            $table->json('schedule')->nullable();
             $table->enum('level', ['beginner', 'intermediate', 'advanced']);
             $table->timestamps();
         });

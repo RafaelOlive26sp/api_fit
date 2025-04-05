@@ -14,11 +14,11 @@ class Student extends Model
     {
         return $this->belongsTo(User::class,'users_id','id');
     }
-    public function studentClass()
+    public function classes()
     {
         return $this->hasMany(StudentClass::class,'students_id', 'id');
     }
-    public function payment()
+    public function payments()
     {
         return $this->hasMany(Payment::class,'students_id');
     }

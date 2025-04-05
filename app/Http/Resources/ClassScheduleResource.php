@@ -14,18 +14,16 @@ class ClassScheduleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return
-        [   'id'=> $this->id,
-            'date'=> $this->date,
-            'day_of_week'=> $this->day_of_week,
-            'start_time'=> $this->start_time,
-            'end_time'=> $this->end_time,
-                'classes_id' => $this->classe->id ? [
-                    'name' => $this->classe->name,
-                    'max_students' => $this->classe->max_students,
-                    'schedule' => $this->classe->schedule,
-                    'level' => $this->classe->level
-                ] : null
+//
+        return  [
+            'id' => $this->id,
+            'name' => $this->name,
+            'max_students' => $this->max_students,
+            'level' => $this->level,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'schedules_patterns' => $this->schedulesPatterns,
+            'extra_classes' => $this->extraClasses,
         ];
     }
 }

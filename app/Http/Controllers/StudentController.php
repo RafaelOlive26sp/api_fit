@@ -23,7 +23,7 @@ class StudentController extends Controller
 //                ->select('age','height','weight','gender','medical_condition','users_id')->paginate(5);
         $students = Student::with([
                 'user:id,name', // Carrega o usuário associado ao aluno
-                'payment'=> function ($query) {
+                'payments'=> function ($query) {
                     $query->select('status', 'amount', 'due_date', 'students_id')
                     ->orderBy('due_date','desc')
                     ->limit(1);

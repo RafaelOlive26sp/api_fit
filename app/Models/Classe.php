@@ -16,10 +16,7 @@ class Classe extends Model
     {
         return $this->hasMany(ClassSchedule::class,'classes_id','id');
     }
-    public function class_schedules_pattern()
-    {
-        return $this->hasMany(ClassSchedulesPattern::class,'classes_id','id');
-    }
+
    // Relacionamento com StudentClass
    public function students()
    {

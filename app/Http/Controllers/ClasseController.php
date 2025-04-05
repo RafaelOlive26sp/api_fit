@@ -28,8 +28,8 @@ class ClasseController extends Controller
     {
         $this->authorize('create', User::class);
         $validateData = $request->validated();
-
-        return Classe::create($validateData);
+        Classe::create($validateData);
+        return response()->json(['message'=>  'Turma criada com sucesso'], 200);
     }
 
     /**

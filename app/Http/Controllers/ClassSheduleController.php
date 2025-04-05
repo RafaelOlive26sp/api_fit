@@ -18,7 +18,11 @@ class ClassSheduleController extends Controller
      */
     public function index()
     {
-        $classes = ClassSchedule::with('classe')->get();
+        $classes = Classe::with(
+            'schedulesPatterns',
+                    'extraClasses.classe',
+        )->get();
+//        dd($classes);
         return ClassScheduleResource::collection($classes);
     }
 

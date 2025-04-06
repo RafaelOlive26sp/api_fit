@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClassSheduleController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ScheduleClassesForClasses;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentClassesController;
 use App\Http\Controllers\StudentController;
@@ -26,7 +27,8 @@ Route::post('student/{id?}',[StudentController::class,'store'])->middleware('aut
 Route::post('payment/{id?}',[PaymentController::class,'store'])->middleware('auth:sanctum');
 Route::post('class/register',[StudentClassesController::class,'store'])->middleware('auth:sanctum');
 Route::post('clasregister',[ScheduleController::class,'store'])->middleware('auth:sanctum');
-Route::post('register',[UserController::class,'store']);
-});
+Route::post('created/schedules/classes',[ScheduleClassesForClasses::class,'store'])->middleware('auth:sanctum');
 
+});
+Route::post('v1/register',[UserController::class,'store']);
 Route::post('login', [AuthController::class, 'login']);

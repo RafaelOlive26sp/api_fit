@@ -34,4 +34,9 @@ class Classe extends Model
    {
        return $this->hasMany(ClassSchedule::class, 'classes_id', 'id');
    }
+
+   public function students_class()
+   {
+       return $this->hasMany(StudentClass::class, 'classes_id', 'id');
+   }
 }

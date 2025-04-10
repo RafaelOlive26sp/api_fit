@@ -23,6 +23,7 @@ class ClassScheduleResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'schedules_patterns' => $this->schedulesPatterns,
+            'students' => $this->students_class,
             'extra_classes' => $this->extraClasses,
         ];
     }

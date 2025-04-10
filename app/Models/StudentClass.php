@@ -20,4 +20,9 @@ class StudentClass extends Model
     {
         return $this->belongsTo(Classe::class, 'classes_id', 'id');
     }
+
+    public function class_schedule()
+    {
+        return $this->belongsTo(ClassSchedule::class, 'classes_id', 'id');
+    }
 }

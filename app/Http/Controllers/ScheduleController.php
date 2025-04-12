@@ -26,7 +26,7 @@ class ScheduleController extends Controller
                     ->limit(1);
             },
 
-        ])->select('id', 'age', 'height', 'weight', 'gender', 'medical_condition', 'users_id')->paginate(5);
+        ])->select('id', 'age', 'height', 'weight', 'gender', 'medical_condition', 'users_id')->get();
 
         return ScheduleClassResource::collection($students);
     }

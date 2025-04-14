@@ -25,9 +25,13 @@ class ClassSheduleController extends Controller
         $classes = Classe::with([
             'schedulesPatterns',
             'extraClasses.classe',
-            'students_class'=> function ($query) {
-                $query->select('students_id', 'classes_id',);
+            'user'=> function ($query) {
+                $query->select('id', 'name');
             },
+            // 'students_class.student'
+            // 'students_class.student'=> function ($query) {
+            //     $query->select('students_id', 'classes_id',);
+            // },
         ])->select('id', 'name', 'max_students', 'level')->get();
 
 //        dd($classes);

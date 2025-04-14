@@ -25,6 +25,7 @@ class ClassScheduleResource extends JsonResource
             'schedules_patterns' => $this->schedulesPatterns,
             'students' => $this->students_class,
             'extra_classes' => $this->extraClasses,
+            'user' => $this->user,
         ];
     }
 }

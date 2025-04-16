@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ScheduleClassRequest;
+use App\Http\Requests\UpdateScheduleRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\ScheduleClassResource;
 use App\Models\Student;
@@ -38,7 +39,7 @@ class ScheduleController extends Controller
     public function store(ScheduleClassRequest $request)
     {
         $validateData = $request->validated();
-
+        // dd($validateData);
         StudentClass::create($validateData);
 
         return response()->json(['message' => 'Class Schedule with success'], 200);
@@ -65,9 +66,21 @@ class ScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateScheduleRequest $request, string $id)
     {
-        //
+        $validatedData = $request->validated();
+
+    // Verifica se o aluno existe (se necessário para validação extra)
+    Student::findOrFail($validatedData['students_id']);
+
+    // Busca o registro de agendamento pelo ID
+    $studentClass = StudentClass::findOrFail($id);
+
+
+    // Atualiza os dados
+    $studentClass->update($validatedData);
+
+        return response()->json(['message' => 'Class Schedule updated with success'], 200);
     }
 
     /**

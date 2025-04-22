@@ -60,7 +60,11 @@ class ScheduleController extends Controller
         // Verifica se o aluno existe (se necessário para validação extra)
         $student = Student::where('users_id',$request->user()->id )->first();
         $this->authorize('view', $student);
-        $userStudent = Student::findOrFail($id);
+        $userStudent = Student::find($id);
+
+        if(!$userStudent){
+            return response()->json(['message' => 'Student not found'], 404);
+        }
 
         $studentExist = StudentClass::where('students_id', $userStudent->id)
             ->with(

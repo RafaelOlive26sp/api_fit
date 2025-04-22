@@ -64,7 +64,6 @@ class ScheduleController extends Controller
 
         $studentExist = StudentClass::where('students_id', $userStudent->id)
             ->with(
-                'student.user',
                 'classe.schedulesPatterns',
                 'classe.extraClasses'
             )->get();

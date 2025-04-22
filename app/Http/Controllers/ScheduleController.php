@@ -6,12 +6,18 @@ use App\Http\Requests\ScheduleClassRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\ScheduleClassResource;
+use App\Http\Resources\ScheduleShowClassResource;
 use App\Models\Student;
 use App\Models\StudentClass;
+use App\Models\User;
+use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\Request;
+
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ScheduleController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -43,16 +49,27 @@ class ScheduleController extends Controller
         StudentClass::create($validateData);
 
         return response()->json(['message' => 'Class Schedule with success'], 200);
-
-
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, String $id)
     {
-        //
+
+        // Verifica se o aluno existe (se necessário para validação extra)
+        $student = Student::where('users_id',$request->user()->id )->first();
+        $this->authorize('view', $student);
+        $userStudent = Student::findOrFail($id);
+
+        $studentExist = StudentClass::where('students_id', $userStudent->id)
+            ->with(
+                'student.user',
+                'classe.schedulesPatterns',
+                'classe.extraClasses'
+            )->get();
+
+        return ScheduleShowClassResource::collection($studentExist);
     }
 
     /**
@@ -70,15 +87,15 @@ class ScheduleController extends Controller
     {
         $validatedData = $request->validated();
 
-    // Verifica se o aluno existe (se necessário para validação extra)
-    Student::findOrFail($validatedData['students_id']);
+        // Verifica se o aluno existe (se necessário para validação extra)
+        Student::findOrFail($validatedData['students_id']);
 
-    // Busca o registro de agendamento pelo ID
-    $studentClass = StudentClass::findOrFail($id);
+        // Busca o registro de agendamento pelo ID
+        $studentClass = StudentClass::findOrFail($id);
 
 
-    // Atualiza os dados
-    $studentClass->update($validatedData);
+        // Atualiza os dados
+        $studentClass->update($validatedData);
 
         return response()->json(['message' => 'Class Schedule updated with success'], 200);
     }

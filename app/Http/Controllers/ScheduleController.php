@@ -63,7 +63,7 @@ class ScheduleController extends Controller
         $userStudent = Student::find($id);
 
         if(!$userStudent){
-            return response()->json(['message' => 'Student not found'], 404);
+            abort(404, 'Nenhum aluno encontrado.');
         }
 
         $studentExist = StudentClass::where('students_id', $userStudent->id)

@@ -63,7 +63,7 @@ class ScheduleController extends Controller
         $userStudent = Student::find($id);
 
         if(!$userStudent){
-            abort(404, 'Nenhum aluno encontrado.');
+            abort(404, 'Nenhum Agendamento Encontrado, entre em contato com seu professor.');
         }
 
         $studentExist = StudentClass::where('students_id', $userStudent->id)

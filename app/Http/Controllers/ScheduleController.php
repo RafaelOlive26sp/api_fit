@@ -60,7 +60,8 @@ class ScheduleController extends Controller
         // Verifica se o aluno existe (se necessário para validação extra)
         $student = Student::where('users_id',$request->user()->id )->first();
         $this->authorize('view', $student);
-        $userStudent = Student::find($id);
+        // dd($id);
+        $userStudent = Student::where('users_id',$id)->first();
 
         if(!$userStudent){
             abort(404, 'Nenhum Agendamento Encontrado, entre em contato com seu professor.');

@@ -43,10 +43,15 @@ class StudentController extends Controller
     {
         $user = $request->user();
 
+
         if($user->can('create', Student::class)&& $id){
             $userId = $id;
         }else{
             $userId = $user->id;
+        }
+        $ifUserExist = Student::where('users_id', $userId)->exists();
+        if ($ifUserExist){
+            return response()->json(['message' => 'Profile already exists','status' => 409], 409);
         }
 
         $validateData = $request->validated();

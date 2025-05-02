@@ -32,7 +32,7 @@ class StudentResquest extends FormRequest
             'age' => ['required','integer','min:1','max:100','regex:/^[0-9]+$/'],
             'height' => ['required','numeric','min:1.30','max:2.0','regex:/^\d+(\.\d{1,2})?$/'],
             'weight' => ['required','numeric','min:30','max:200','regex:/^\d+(\.\d{1,2})?$/'],
-            'gender' => ['required','string','in:female,male'],
+            'gender' => ['required','string','in:female,male','regex:/^[a-zA-Z]+$/'],
             'smoker' => ['required','boolean'],
             'medical_condition' => ['required','string','max:255','regex:/^[a-zA-Z0-9\s]+$/'],
             'previous_experience' => ['required','string','max:255','regex:/^[a-zA-Z0-9\s]+$/'],

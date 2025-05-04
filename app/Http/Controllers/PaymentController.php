@@ -73,20 +73,25 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
+        // dd($request->user()->id);
+        // dd($id);
+        $userId = $request->user()->id;
 
-        $student = Student::where('users_id', $id)->first();
 
+        $student = Student::where('users_id', $userId)->first();
+        // dd($student);
         if(!$student){
            return response()->json(['message'=>'O usuario nao concluiu o cadastro de aluno'], 404);
         }
 
 
-
         $this->authorize('view', $student);
 
 
+
+        // dd($student->id);
         $paymentUserId = Payment::where('students_id', $student->id)->get();
 
 

@@ -56,15 +56,15 @@ class ScheduleController extends Controller
      */
     public function show(Request $request, String $id)
     {
-
+        // dd(request()->user());
         // Verifica se o aluno existe (se necessário para validação extra)
         $student = Student::where('users_id',$request->user()->id )->first();
         $this->authorize('view', $student);
         // dd($id);
-        $userStudent = Student::where('users_id',$id)->first();
-
+        $userStudent = Student::where('users_id',$id)->first(); //verifica na tabela de estudantes o id, se o usuario tem o cadastro de estudante
+        // dd($userStudent->id);
         if(!$userStudent){
-            abort(404, 'Nenhum Agendamento Encontrado, entre em contato com seu professor.');
+            abort(404, 'Ops!! Seu cadastro nao esta Finalizado, Volte ao cadastro de perfil.');
         }
 
         $studentExist = StudentClass::where('students_id', $userStudent->id)
@@ -72,6 +72,13 @@ class ScheduleController extends Controller
                 'classe.schedulesPatterns',
                 'classe.extraClasses'
             )->get();
+
+            if ($studentExist->isEmpty()) {
+                abort(404, 'Não ha nenhum agendamento, Entre em contato com seu Professor.');
+            }
+
+
+            // dd($studentExist);
 
         return ScheduleShowClassResource::collection($studentExist);
     }

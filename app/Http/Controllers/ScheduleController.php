@@ -14,6 +14,7 @@ use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\Request;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use PhpParser\Builder;
 
 class ScheduleController extends Controller
 {
@@ -23,6 +24,7 @@ class ScheduleController extends Controller
      */
     public function index()
     {
+        // Precisa Adicionar a verificação de se o usuario é aluno ou professor
         $students = Student::with([
             'user:id,name', // Carrega o usuário associado ao aluno
             'classes.classe.schedulesPatterns',
@@ -56,18 +58,18 @@ class ScheduleController extends Controller
      */
     public function show(Request $request, String $id)
     {
-        // dd(request()->user());
+//
         // Verifica se o aluno existe (se necessário para validação extra)
-        $student = Student::where('users_id',$request->user()->id )->first();
-        $this->authorize('view', $student);
-        // dd($id);
-        $userStudent = Student::where('users_id',$id)->first(); //verifica na tabela de estudantes o id, se o usuario tem o cadastro de estudante
-        // dd($userStudent->id);
-        if(!$userStudent){
-            abort(404, 'Ops!! Seu cadastro nao esta Finalizado, Volte ao cadastro de perfil.');
+        try {
+            $student = Student::where('users_id', $request->user()->id)->firstOrFail();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            abort(404, 'Olá! Parece que você ainda não completou seu cadastro de aluno. Por favor, finalize seu perfil antes de continuar.');
         }
 
-        $studentExist = StudentClass::where('students_id', $userStudent->id)
+        $this->authorize('view', $student);
+
+        // verifica se o aluno existe na tabela de aulas agendadas, capturando somente o Id através do Request
+        $studentExist = StudentClass::where('students_id', $student->id)
             ->with(
                 'classe.schedulesPatterns',
                 'classe.extraClasses'
@@ -76,10 +78,6 @@ class ScheduleController extends Controller
             if ($studentExist->isEmpty()) {
                 abort(404, 'Não ha nenhum agendamento, Entre em contato com seu Professor.');
             }
-
-
-            // dd($studentExist);
-
         return ScheduleShowClassResource::collection($studentExist);
     }
 

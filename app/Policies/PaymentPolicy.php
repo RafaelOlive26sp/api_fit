@@ -47,9 +47,9 @@ class PaymentPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Payment $payment): bool
+    public function delete(User $user): bool
     {
-        return false;
+        return in_array($user->role, ['admin', 'teacher']);
     }
 
     /**

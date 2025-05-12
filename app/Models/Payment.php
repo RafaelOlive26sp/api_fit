@@ -13,8 +13,5 @@ class Payment extends Model
     {
         return $this->hasOne(Student::class,'id','students_id');
     }
-    public function appointment()
-    {
-        return $this->hasMany(Appointment::class,'payments_id');
-    }
+
 }

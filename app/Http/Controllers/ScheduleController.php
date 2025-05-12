@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ScheduleClassRequest;
 use App\Http\Requests\UpdateScheduleRequest;
-use App\Http\Resources\AppointmentResource;
+
 use App\Http\Resources\ScheduleClassResource;
 use App\Http\Resources\ScheduleShowClassResource;
 use App\Models\Student;

@@ -14,8 +14,7 @@ class ScheduleClassesForClasses extends Controller
      */
     public function index()
     {
-        $appointment = Appointment::all();
-        dd($appointment);
+       return 'estamos em manutenção';
     }
 
     /**

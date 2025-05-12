@@ -13,8 +13,5 @@ class ClassSchedule extends Model
   {
       return $this->belongsTo(Classe::class,'classes_id','id');
   }
-  public function appointment()
-  {
-      return $this->hasMany(Appointment::class,'class_schedules_id');
-  }
+
 }

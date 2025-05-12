@@ -81,7 +81,7 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $this->authorize('update', User::class);
     }
 
     /**
@@ -89,6 +89,6 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->authorize('delete', User::class);
     }
 }

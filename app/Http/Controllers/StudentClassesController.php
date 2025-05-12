@@ -6,25 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassResquest;
 use App\Models\ClassSchedulesPattern;
 use App\Models\StudentClass;
+use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 class StudentClassesController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $this->authorize('viewAny', User::class);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -41,23 +38,17 @@ class StudentClassesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $this->authorize('viewAny', User::class);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $this->authorize('update', User::class);
     }
 
     /**
@@ -65,6 +56,6 @@ class StudentClassesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->authorize('delete', User::class);
     }
 }

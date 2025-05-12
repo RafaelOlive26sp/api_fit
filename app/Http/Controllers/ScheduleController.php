@@ -25,6 +25,8 @@ class ScheduleController extends Controller
     public function index()
     {
         // Precisa Adicionar a verificação de se o usuario é aluno ou professor
+
+        $this->authorize('viewAny', Student::class);
         $students = Student::with([
             'user:id,name', // Carrega o usuário associado ao aluno
             'classes.classe.schedulesPatterns',
@@ -81,13 +83,6 @@ class ScheduleController extends Controller
         return ScheduleShowClassResource::collection($studentExist);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -114,6 +109,7 @@ class ScheduleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->authorize('delete', User::class);
+        // Verifica se o aluno existe (se necessário para validação extra)
     }
 }

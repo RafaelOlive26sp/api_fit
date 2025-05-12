@@ -62,6 +62,7 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $this->authorize('update', User::class);
         return 'Hello from UserController@index';
     }
 

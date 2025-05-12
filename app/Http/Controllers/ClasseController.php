@@ -16,6 +16,7 @@ class ClasseController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
         return 'Listagem de turmas';
     }
 
@@ -37,6 +38,7 @@ class ClasseController extends Controller
      */
     public function show(string $id)
     {
+        $this->authorize('viewAny', User::class);
         return 'Detalhes da turma1';
     }
 
@@ -47,6 +49,7 @@ class ClasseController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $this->authorize('update', User::class);
         return 'Turma atualizada com sucesso';
     }
 
@@ -55,6 +58,7 @@ class ClasseController extends Controller
      */
     public function destroy(string $id)
     {
+        $this->authorize('delete', User::class);
         return 'Turma removida com sucesso';
     }
 }

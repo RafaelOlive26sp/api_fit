@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AppointmentController;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClasseController;
 use App\Http\Controllers\ClassSheduleController;
@@ -20,10 +20,10 @@ Route::resource('schedules', ClassSheduleController::class)->middleware('auth:sa
 Route::resource('student', StudentController::class)->middleware('auth:sanctum');
 Route::resource('payment', PaymentController::class)->middleware('auth:sanctum');
 Route::resource('clschedule', ScheduleController::class)->middleware('auth:sanctum');
-//Route::resource('appointment', AppointmentController::class)->middleware('auth:sanctum');
+
 Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
 Route::post('student/{id?}',[StudentController::class,'store'])->middleware('auth:sanctum');
-//Route::post('appointment/{id?}',[AppointmentController::class,'store'])->middleware('auth:sanctum');
+
 Route::post('payment/{id?}',[PaymentController::class,'store'])->middleware('auth:sanctum');
 Route::post('class/register',[StudentClassesController::class,'store'])->middleware('auth:sanctum');
 Route::post('clasregister',[ScheduleController::class,'store'])->middleware('auth:sanctum');

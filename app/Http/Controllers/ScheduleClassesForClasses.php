@@ -5,32 +5,32 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ScheduleClassesForClassesRequest;
 use App\Models\Appointment;
 use App\Models\ClassSchedulesPattern;
+use App\Models\User;
 use Illuminate\Http\Request;
+
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ScheduleClassesForClasses extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
        return 'estamos em manutenção';
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(ScheduleClassesForClassesRequest $request)
     {
-//        dd($request);
+        $this->authorize('create', User::class);
         $validateData = $request->validated();
         ClassSchedulesPattern::create($validateData);
 
@@ -42,23 +42,19 @@ class ScheduleClassesForClasses extends Controller
      */
     public function show(string $id)
     {
-        //
+        $this->authorize('viewAny', User::class);
+        return 'estamos em manutenção';
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $this-> authorize('update', User::class);
+        return 'estamos em manutenção';
     }
 
     /**
@@ -66,6 +62,7 @@ class ScheduleClassesForClasses extends Controller
      */
     public function destroy(string $id)
     {
-        //
+      $this->authorize('delete', User::class);
+        return 'estamos em manutenção';
     }
 }

@@ -23,7 +23,8 @@ return [
 
     'allowed_origins_patterns' => ['*'], // Permite especificar padrões de origens usando expressões regulares. '*' permite todas as origens.
 
-    'allowed_headers' => ['Accept', 'Authorization', 'Content-Type', 'X-Requested-With', 'X-CSRF-TOKEN'], // Lista os cabeçalhos HTTP permitidos nas requisições.
+    'allowed_headers' => ['Accept', 'Authorization', 'Content-Type', 'X-Requested-With', 'X-CSRF-TOKEN', 'X-Application-Source'],
+    // Lista os cabeçalhos HTTP permitidos nas requisições.
 
     'exposed_headers' => [], // Define os cabeçalhos que podem ser expostos ao navegador na resposta.
 

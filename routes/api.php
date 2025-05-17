@@ -10,6 +10,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentClassesController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckApplicationSource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

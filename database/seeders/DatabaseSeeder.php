@@ -27,13 +27,13 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => 'teacher',
         ]);
-        for ($i = 0; $i < 10; $i++) {
-            User::factory()->create([
-                'name' => fake()->name(),
-                'email' => fake()->unique()->safeEmail(),
-                'password' => bcrypt('password'),
-                'role' => 'student',
-            ]);
-        }
+//        for ($i = 0; $i < 10; $i++) {
+//            User::factory()->create([
+//                'name' => fake()->name(),
+//                'email' => fake()->unique()->safeEmail(),
+//                'password' => bcrypt('password'),
+//                'role' => 'student',
+//            ]);
+//        }
     }
 }

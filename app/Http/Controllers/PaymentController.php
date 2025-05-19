@@ -90,7 +90,7 @@ class PaymentController extends Controller
 
 
         if ($paymentUserId->isEmpty()) {
-            return response()->json(['message' => 'pagamento nao encontrado'], 404);
+            return response()->json(['message' => 'pagamento nao encontrado, efetue o pagamento para prosseguir'], 404);
         }
         $recentPayment = Payment::where('students_id', $student->id)
             ->orderBy('created_at', 'desc') // Ordena por data de criação, da mais recente para a mais antiga

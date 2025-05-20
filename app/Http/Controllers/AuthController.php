@@ -9,9 +9,21 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use function Pest\Laravel\json;
+use App\Services\Query\UserQueryService;
+use App\Services\Query\StudentQueryService;
 
 class AuthController extends Controller
 {
+    
+    protected UserQueryService $userQueryService;
+    protected StudentQueryService $studentQueryService;
+
+    public function __construct(UserQueryService $userQueryService, StudentQueryService $studentQueryService)
+    {
+        $this->userQueryService = $userQueryService;
+        $this->studentQueryService = $studentQueryService;
+    }
+
     private const ROLES = [
         'ADMIN' => 'admin',
         'TEACHER' => 'teacher'
@@ -40,7 +52,7 @@ class AuthController extends Controller
     private function successFulLoginResponse(User $user)
     {
         $token = $user->createToken('auth_token')->plainTextToken;
-        $isStudent = Student::where('users_id', $user->id)->exists();
+        $isStudent = $this->studentQueryService->getStudentByUserId($user->id) !== null;
 
         return response()->json([
             'access_token' => $token,
@@ -68,7 +80,7 @@ class AuthController extends Controller
     }
     private function userExists(string $email): bool
     {
-        return User::where('email', $email)->exists();
+        return $this->userQueryService->getUserByEmail($email) !== null;
     }
 
     private function validateApplicationSource(Request $request): bool

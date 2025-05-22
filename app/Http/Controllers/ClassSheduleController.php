@@ -15,10 +15,12 @@ class ClassSheduleController extends Controller
 {
 
     protected ClasseQueryService $classeQueryService;
+    protected ClassScheduleQueryService $classScheduleQueryService;
 
-    public function __construct(ClasseQueryService $classeQueryService)
+    public function __construct(ClasseQueryService $classeQueryService, ClassScheduleQueryService $classScheduleQueryService)
     {
         $this->classeQueryService = $classeQueryService;
+        $this->classScheduleQueryService = $classScheduleQueryService;
     }
 
     use AuthorizesRequests;
@@ -49,8 +51,8 @@ class ClassSheduleController extends Controller
      */
     public function show(Int $id)
     {
-        $class = ClassSchedule::with('classe')->findOrFail($id);
-
+        // $class = ClassSchedule::with('classe')->findOrFail($id);
+        $class = $this->classeQueryService->getClassScheduleById($id);
 
         return new ClassScheduleResource($class);
     }

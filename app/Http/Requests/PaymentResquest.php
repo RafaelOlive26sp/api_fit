@@ -16,10 +16,13 @@ class PaymentResquest extends FormRequest
     }
     public function prepareForValidation()
     {
-//            dd(request()->all());
+        
+        // Recebe o Id do usuario caso seja passado atraves do end-point Aonde somente o admin pode passar o id do aluno 
+        // Caso nao seja passado, o id do usuario logado sera utilizado
+        // dd(request()->all());
         $userId = $this->input('userId');
         $student =  $userId ? Student::where('users_id', $userId )->first() : auth()->user()->student;
-//            dd($student);
+        
         if (!$student) {
             abort(422, 'Nenhum estudante associado ao usuário autenticado.');
         }

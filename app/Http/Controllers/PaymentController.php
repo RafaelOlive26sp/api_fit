@@ -7,6 +7,8 @@ use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
 use App\Models\Student;
+use App\Services\Query\PaymentQueryService;
+use App\Services\Query\StudentQueryService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -15,6 +17,14 @@ use function PHPUnit\Framework\isEmpty;
 
 class PaymentController extends Controller
 {
+    protected PaymentQueryService $paymentQueryService;
+    protected StudentQueryService $studentQueryService;
+
+    public function __construct(PaymentQueryService $paymentQueryService, StudentQueryService $studentQueryService)
+    {
+        $this->studentQueryService = $studentQueryService;
+        $this->paymentQueryService = $paymentQueryService;
+    }
     use AuthorizesRequests;
     /**
      * Display a listing of the resource.
@@ -22,10 +32,12 @@ class PaymentController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Payment::class);
-        $payments = Payment::with([
-            'student.user:id,name' // Carrega o usuário associado ao aluno
-        ])->select('id', 'status', 'amount', 'due_date', 'students_id')->get();
-        // dd($payments);
+        // $payments = Payment::with([
+        //     'student.user:id,name' // Carrega o usuário associado ao aluno
+        // ])->select('id', 'status', 'amount', 'due_date', 'students_id')->get();
+        // // dd($payments);
+        $payments = $this->paymentQueryService->getAllPayments();
+
         return PaymentResource::collection($payments);
 
     }
@@ -39,30 +51,46 @@ class PaymentController extends Controller
     {
 
         $user = $request->user();
-
-
-        if ($user->can('create', Payment::class) && $id) {
-            $student = Student::where('users_id', $id)->first();
-            if (!$student) {
-                return response()->json(['message' => 'O usuário não concluiu o cadastro de aluno'], 404);
-            }
-            $userId = $student->id;
-        } else {
-            $student = Student::where('users_id', $user->id)->first();
-            if (!$student) {
-                return response()->json(['message' => 'O usuário não concluiu o cadastro de aluno'], 404);
-            }
-            $userId = $student->id;
+        if($id){
+            // Só admin pode passar o id de outro aluno
+            $this->authorize('create', Payment::class);
+            $student = $this->existsStudentWithId($id);
+          
+           if (!$student) 
+           {
+               return response()->json(['message' => 'Usuário não concluiu o cadastro de aluno'], 404);
+           }
+           $this->validateDataAndCreatePayment($request, $student->id);
+           return response()->json(['message' => 'Pagamento criado com sucesso'], 201);
+       
         }
+        // se o id não for passado, verifica se o usuario logado é um aluno, se sim,
+        // Para aluno logado
+        $student = $this->existsStudentWithId($user->id);
+        if (!$student) 
+        {
+            return response()->json(['message' => 'Usuário não concluiu o cadastro de aluno'], 404);
+        }
+        
+        $this->validateDataAndCreatePayment($request, $student->id);
+        return response()->json(['message' => 'Pagamento criado com sucesso'], 201);
+       
+    }
 
+    private function existsStudentWithId($id)
+    {
+        $existingStudent = $this->studentQueryService->getStudentByUserId($id);
+        return $existingStudent;
+    }
 
+    private function validateDataAndCreatePayment(PaymentResquest $request, $userId)
+    {   
         $validateData = $request->validated();
         $validateData['students_id'] = $userId;
-
-//        dd($validateData);
-
         return Payment::create($validateData);
     }
+
+
 
     /**
      * Display the specified resource.

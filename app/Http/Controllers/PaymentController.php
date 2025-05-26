@@ -100,12 +100,9 @@ class PaymentController extends Controller
         // dd($request->user()->id);
         // dd($id);
         $userId = $request->user()->id;
-
-
-        $student = Student::where('users_id', $userId)->first();
-        // dd($student);
+        $student = $this->existsStudentWithId($userId); 
         if(!$student){
-           return response()->json(['message'=>'O usuario nao concluiu o cadastro de aluno'], 404);
+            return response()->json(['message'=>'O usuario nao concluiu o cadastro de aluno'], 404);
         }
 
 
@@ -113,17 +110,17 @@ class PaymentController extends Controller
 
 
 
-        // dd($student->id);
-        $paymentUserId = Payment::where('students_id', $student->id)->get();
+         // retorna os pagamentos com base no id do usuario
+        // $paymentUserId = Payment::where('students_id', $student->id)->get();
+        $paymentUserId = $this->getDataPaymentsWithUserId($student->id);
+        // dd($paymentUserId);
 
-
-        if ($paymentUserId->isEmpty()) {
+        if ($paymentUserId->isEmpty()) { //O isEmpty() e em caso de get()na consulta, aonde retorna um collection --
+                                        // e em caso de retorno unico como first() o correto usar is_null($..)
             return response()->json(['message' => 'pagamento nao encontrado, efetue o pagamento para prosseguir'], 404);
         }
-        $recentPayment = Payment::where('students_id', $student->id)
-            ->orderBy('created_at', 'desc') // Ordena por data de criação, da mais recente para a mais antiga
-            ->first();
-
+        $recentPayment = $this->getDataPaymentsWithUserId($student->id);
+             dd($recentPayment); // Parei aqui @@@
         if ($recentPayment && $recentPayment->status === 'overdue') {
             // Casos em que o pagamento mais recente está com status "overdue"
             $paymentOverDue = Payment::where('status', 'overdue')
@@ -137,11 +134,12 @@ class PaymentController extends Controller
                 'paymentOverDue' => $paymentOverDue,
             ], 404);
         }
-
-
-
-
         return  PaymentResource::collection($paymentUserId);
+    }
+
+    private function getDataPaymentsWithUserId($userId)
+    {
+        return $this->paymentQueryService->getPaymentByUserId($userId);
     }
 
 

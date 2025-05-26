@@ -12,36 +12,30 @@ use App\Services\Query\StudentQueryService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
+use phpDocumentor\Reflection\Types\Boolean;
 use function Laravel\Prompts\select;
 use function PHPUnit\Framework\isEmpty;
 
 class PaymentController extends Controller
 {
-    protected PaymentQueryService $paymentQueryService;
-    protected StudentQueryService $studentQueryService;
 
-    public function __construct(PaymentQueryService $paymentQueryService, StudentQueryService $studentQueryService)
-    {
-        $this->studentQueryService = $studentQueryService;
-        $this->paymentQueryService = $paymentQueryService;
-    }
+
+    public function __construct(
+        protected PaymentQueryService $paymentQueryService,
+        protected StudentQueryService $studentQueryService
+    ){}
+
     use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $this->authorize('viewAny', Payment::class);
-        // $payments = Payment::with([
-        //     'student.user:id,name' // Carrega o usuário associado ao aluno
-        // ])->select('id', 'status', 'amount', 'due_date', 'students_id')->get();
-        // // dd($payments);
         $payments = $this->paymentQueryService->getAllPayments();
-
         return PaymentResource::collection($payments);
-
     }
-
 
 
     /**
@@ -51,30 +45,28 @@ class PaymentController extends Controller
     {
 
         $user = $request->user();
-        if($id){
+        if ($id) {
             // Só admin pode passar o id de outro aluno
             $this->authorize('create', Payment::class);
             $student = $this->existsStudentWithId($id);
-          
-           if (!$student) 
-           {
-               return response()->json(['message' => 'Usuário não concluiu o cadastro de aluno'], 404);
-           }
-           $this->validateDataAndCreatePayment($request, $student->id);
-           return response()->json(['message' => 'Pagamento criado com sucesso'], 201);
-       
+
+            if (!$student) {
+                return response()->json(['message' => 'Usuário não concluiu o cadastro de aluno'], 404);
+            }
+            $this->validateDataAndCreatePayment($request, $student->id);
+            return response()->json(['message' => 'Pagamento criado com sucesso'], 201);
+
         }
         // se o id não for passado, verifica se o usuario logado é um aluno, se sim,
         // Para aluno logado
         $student = $this->existsStudentWithId($user->id);
-        if (!$student) 
-        {
+        if (!$student) {
             return response()->json(['message' => 'Usuário não concluiu o cadastro de aluno'], 404);
         }
-        
+
         $this->validateDataAndCreatePayment($request, $student->id);
         return response()->json(['message' => 'Pagamento criado com sucesso'], 201);
-       
+
     }
 
     private function existsStudentWithId($id)
@@ -84,12 +76,11 @@ class PaymentController extends Controller
     }
 
     private function validateDataAndCreatePayment(PaymentResquest $request, $userId)
-    {   
+    {
         $validateData = $request->validated();
         $validateData['students_id'] = $userId;
         return Payment::create($validateData);
     }
-
 
 
     /**
@@ -97,50 +88,48 @@ class PaymentController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        // dd($request->user()->id);
-        // dd($id);
         $userId = $request->user()->id;
-        $student = $this->existsStudentWithId($userId); 
-        if(!$student){
-            return response()->json(['message'=>'O usuario nao concluiu o cadastro de aluno'], 404);
+        $student = $this->existsStudentWithId($userId);
+        if (!$student) {
+            return response()->json(['message' => 'O usuario nao concluiu o cadastro de aluno'], 404);
         }
-
-
         $this->authorize('view', $student);
-
-
-
-         // retorna os pagamentos com base no id do usuario
-        // $paymentUserId = Payment::where('students_id', $student->id)->get();
+        // retorna os pagamentos com base no id do usuario
         $paymentUserId = $this->getDataPaymentsWithUserId($student->id);
-        // dd($paymentUserId);
-
         if ($paymentUserId->isEmpty()) { //O isEmpty() e em caso de get()na consulta, aonde retorna um collection --
-                                        // e em caso de retorno unico como first() o correto usar is_null($..)
+            // e em caso de retorno unico como first() o correto usar is_null($..)
             return response()->json(['message' => 'pagamento nao encontrado, efetue o pagamento para prosseguir'], 404);
         }
         $recentPayment = $this->getDataPaymentsWithUserId($student->id);
-             dd($recentPayment); // Parei aqui @@@
-        if ($recentPayment && $recentPayment->status === 'overdue') {
-            // Casos em que o pagamento mais recente está com status "overdue"
-            $paymentOverDue = Payment::where('status', 'overdue')
-                ->where('students_id', $student->id)
-                ->get();
-
-            $paymentOverDue = PaymentResource::collection($paymentOverDue);
-
-            return response()->json([
-                'message' => 'Existe pagamento atrasado',
-                'paymentOverDue' => $paymentOverDue,
-            ], 404);
+        $result = $this->verifiedIfPaymentIsEmpty($recentPayment);
+        if ($result instanceof \Illuminate\Http\JsonResponse) {
+            return $result;
         }
-        return  PaymentResource::collection($paymentUserId);
+        return  PaymentResource::collection($result);
     }
 
     private function getDataPaymentsWithUserId($userId)
     {
         return $this->paymentQueryService->getPaymentByUserId($userId);
     }
+
+    private function verifiedIfPaymentIsEmpty($recentPayment)
+    {
+        if ($recentPayment->isEmpty() || $recentPayment->contains('status', 'overdue'))  // Verifica se o pagamento está vazio ou se contém status 'overdue'
+        {
+//            dd($recentPayment->first()->students_id);
+            //Se o pagamento estiver Vencido (overdue) ou vazio, retorna uma mensagem de erro
+            $verifiedPayment = $this->paymentQueryService->getStatusPayment($recentPayment->first()->students_id);
+
+            return response()->json([
+                'message' => 'Existe pagamento atrasado',
+                'paymentOverDue' => $verifiedPayment,
+            ], 404);
+        }
+//        dd($recentPayment);
+        return $recentPayment;
+    }
+
 
 
 

@@ -33,14 +33,11 @@ class PaymentQueryService
             'student.user:id,name' // Carrega o usuário associado ao aluno
         ])->findOrFail($id);
     }
-    /**
-     * Store payments for a specific student.
-     *
-     * @param int $studentId
-     * @return Collection
-     */
-    public function storePaymentsForStudent(int $studentId): Collection
-    {
-        return Student::where('users_id', $studentId)->first() || null;
+    public function getPaymentByUserId(int $id){
+        $a= Payment::where('students_id', $id)->orderBy('created_at','desc')->get();
+        return $a;
+    }
+    public function getStatusPayment(int $id){
+        return Payment::where('status', 'overdue')->where('students_id', $id)->get();
     }
 }    

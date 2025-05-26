@@ -6,11 +6,11 @@ use App\Http\Requests\PaymentResquest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
-use App\Models\Student;
 use App\Services\Query\PaymentQueryService;
 use App\Services\Query\StudentQueryService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use App\DTO\UpdatePaymentDTO;
 
 use phpDocumentor\Reflection\Types\Boolean;
 use function Laravel\Prompts\select;
@@ -140,17 +140,15 @@ class PaymentController extends Controller
     {
 
 
-        $payment = Payment::where('students_id', $id)->first();
-
+        $payment = $this->getDataPaymentsWithUserId($id);
         if(!$payment){
             return response()->json(['message'=>'O pagamento nao existe '], 404);
         }
-
-
         $this->authorize('update', $payment);
+
         $data = $request->validated();
-//            dd($data);
-        $payment->update($data);
+        $Dto = UpdatePaymentDTO::fromRequest($data);
+        $payment->update($Dto->toArray());
 
         return response()->json(['message' => 'Pagamento atualizado com sucesso', 'status' => 200]);
     }

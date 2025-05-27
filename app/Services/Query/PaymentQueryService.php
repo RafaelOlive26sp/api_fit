@@ -29,6 +29,7 @@ class PaymentQueryService
      */
     public function getPaymentById(int $id): ?Payment
     {
+//        dd($id);
         return Payment::with([
             'student.user:id,name' // Carrega o usuário associado ao aluno
         ])->findOrFail($id);
@@ -40,4 +41,8 @@ class PaymentQueryService
     public function getStatusPayment(int $id){
         return Payment::where('status', 'overdue')->where('students_id', $id)->get();
     }
-}    
+    public function findDataPaymentUserId(int $id)
+    {
+        return Payment::where('students_id', $id)->first();
+    }
+}

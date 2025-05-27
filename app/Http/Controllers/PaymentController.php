@@ -6,8 +6,10 @@ use App\Http\Requests\PaymentResquest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
+use App\Services\PaymentService;
 use App\Services\Query\PaymentQueryService;
 use App\Services\Query\StudentQueryService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\DTO\UpdatePaymentDTO;
@@ -21,6 +23,7 @@ class PaymentController extends Controller
 
 
     public function __construct(
+        protected PaymentService $paymentService,
         protected PaymentQueryService $paymentQueryService,
         protected StudentQueryService $studentQueryService
     ){}
@@ -110,7 +113,12 @@ class PaymentController extends Controller
 
     private function getDataPaymentsWithUserId($userId)
     {
+//        dd($userId);;
         return $this->paymentQueryService->getPaymentByUserId($userId);
+    }
+    private  function findDataPaymentWithUserId($id)
+    {
+        return $this->paymentQueryService->findDataPaymentUserId($id);
     }
 
     private function verifiedIfPaymentIsEmpty($recentPayment)
@@ -138,19 +146,26 @@ class PaymentController extends Controller
      */
     public function update(UpdatePaymentRequest $request, string $id)
     {
+        try
+        {
+            $payment = $this->findDataPaymentWithUserId($id)->first();
 
+            if(!$payment){
+                return response()->json(['message'=>'O pagamento nao existe '], 404);
+            }
+            $this->authorize('update', $payment);
 
-        $payment = $this->getDataPaymentsWithUserId($id);
-        if(!$payment){
-            return response()->json(['message'=>'O pagamento nao existe '], 404);
+            $Dto = UpdatePaymentDTO::fromRequest($request->validated());
+//            dd($Dto); // retorno OK
+            $this->paymentService->update($Dto, $id);
+            return response()->json(['message' => 'Pagamento atualizado com sucesso', 'status' => 200]);
+        }catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao atualizar o pagamento: ' . $e->getMessage()], 500);
         }
-        $this->authorize('update', $payment);
 
-        $data = $request->validated();
-        $Dto = UpdatePaymentDTO::fromRequest($data);
-        $payment->update($Dto->toArray());
 
-        return response()->json(['message' => 'Pagamento atualizado com sucesso', 'status' => 200]);
     }
 
     /**

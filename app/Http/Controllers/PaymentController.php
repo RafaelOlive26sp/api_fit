@@ -113,11 +113,12 @@ class PaymentController extends Controller
 
     private function getDataPaymentsWithUserId($userId)
     {
-//        dd($userId);;
+        // Busca os pagamentos com base no ID do usuário retorna uma coleção de pagamentos
         return $this->paymentQueryService->getPaymentByUserId($userId);
     }
     private  function findDataPaymentWithUserId($id)
     {
+        // Busca os pagamentos com base no ID do usuário retorna somente um pagamento
         return $this->paymentQueryService->findDataPaymentUserId($id);
     }
 
@@ -125,7 +126,6 @@ class PaymentController extends Controller
     {
         if ($recentPayment->isEmpty() || $recentPayment->contains('status', 'overdue'))  // Verifica se o pagamento está vazio ou se contém status 'overdue'
         {
-//            dd($recentPayment->first()->students_id);
             //Se o pagamento estiver Vencido (overdue) ou vazio, retorna uma mensagem de erro
             $verifiedPayment = $this->paymentQueryService->getStatusPayment($recentPayment->first()->students_id);
 
@@ -134,7 +134,7 @@ class PaymentController extends Controller
                 'paymentOverDue' => $verifiedPayment,
             ], 404);
         }
-//        dd($recentPayment);
+
         return $recentPayment;
     }
 

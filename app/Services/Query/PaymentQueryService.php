@@ -45,4 +45,5 @@ class PaymentQueryService
     {
         return Payment::where('students_id', $id)->first();
     }
+    
 }

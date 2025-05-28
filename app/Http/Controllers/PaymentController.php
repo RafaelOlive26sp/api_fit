@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Services\PaymentService;
 use App\Services\Query\PaymentQueryService;
 use App\Services\Query\StudentQueryService;
+use App\Services\Query\UserQueryService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -25,7 +26,8 @@ class PaymentController extends Controller
     public function __construct(
         protected PaymentService $paymentService,
         protected PaymentQueryService $paymentQueryService,
-        protected StudentQueryService $studentQueryService
+        protected StudentQueryService $studentQueryService,
+        protected UserQueryService $userQueryService,
     ){}
 
     use AuthorizesRequests;
@@ -71,21 +73,6 @@ class PaymentController extends Controller
         return response()->json(['message' => 'Pagamento criado com sucesso'], 201);
 
     }
-
-    private function existsStudentWithId($id)
-    {
-        $existingStudent = $this->studentQueryService->getStudentByUserId($id);
-        return $existingStudent;
-    }
-
-    private function validateDataAndCreatePayment(PaymentResquest $request, $userId)
-    {
-        $validateData = $request->validated();
-        $validateData['students_id'] = $userId;
-        return Payment::create($validateData);
-    }
-
-
     /**
      * Display the specified resource.
      */
@@ -110,8 +97,83 @@ class PaymentController extends Controller
         }
         return  PaymentResource::collection($result);
     }
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdatePaymentRequest $request, string $id)
+    {
+        try
+        {
+            $payment = $this->findDataPaymentWithUserId($id)->first();
 
-    private function getDataPaymentsWithUserId($userId)
+            if(!$payment){
+                return response()->json(['message'=>'O pagamento nao existe '], 404);
+            }
+            $this->authorize('update', $payment);
+
+            $Dto = UpdatePaymentDTO::fromRequest($request->validated());
+            $this->paymentService->update($Dto, $id);
+            return response()->json(['message' => 'Pagamento atualizado com sucesso', 'status' => 200]);
+        }catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao atualizar o pagamento: ' . $e->getMessage()], 500);
+        }
+
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $userId = $this->findUserWithId($id);
+        $this->authorize('delete', Payment::class);
+        $payment = $this->findPaymentWithId($id);
+        if ($this->deletePayment($payment)) {
+            return response()->json(['message'=>'Pagamento Deletado com sucesso.']);
+        };
+        return response()->json(['message'=>'Erro ao deletar o pagamento'],500);
+    }   
+
+    private function deletePayment($data){
+        return $data->delete();
+        
+    }
+    private function findPaymentWithId($id)
+    {
+        // dd($id);
+        $payment = $this->paymentQueryService->findDataPaymentUserId($id);
+        if(!$payment){
+            throw new ModelNotFoundException('Pagamento nao encontrado');
+        }
+        return $payment;
+    }
+    private function findUserWithId($id)
+    {
+        // Busca o usuário com base no ID
+        $user = $this->userQueryService->getUserById($id);
+        if (!$user) {
+            throw new ModelNotFoundException('Usuário não encontrado');
+        }
+        return $user;
+    }
+    private function existsStudentWithId($id)
+    {
+        $existingStudent = $this->studentQueryService->getStudentByUserId($id);
+        return $existingStudent;
+    }
+
+    private function validateDataAndCreatePayment(PaymentResquest $request, $userId)
+    {
+        $validateData = $request->validated();
+        $validateData['students_id'] = $userId;
+        return Payment::create($validateData);
+    }
+
+
+     private function getDataPaymentsWithUserId($userId)
     {
         // Busca os pagamentos com base no ID do usuário retorna uma coleção de pagamentos
         return $this->paymentQueryService->getPaymentByUserId($userId);
@@ -139,40 +201,4 @@ class PaymentController extends Controller
     }
 
 
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePaymentRequest $request, string $id)
-    {
-        try
-        {
-            $payment = $this->findDataPaymentWithUserId($id)->first();
-
-            if(!$payment){
-                return response()->json(['message'=>'O pagamento nao existe '], 404);
-            }
-            $this->authorize('update', $payment);
-
-            $Dto = UpdatePaymentDTO::fromRequest($request->validated());
-//            dd($Dto); // retorno OK
-            $this->paymentService->update($Dto, $id);
-            return response()->json(['message' => 'Pagamento atualizado com sucesso', 'status' => 200]);
-        }catch (ModelNotFoundException $e) {
-            return response()->json(['message' => $e->getMessage()], 404);
-        }catch (\Exception $e) {
-            return response()->json(['message' => 'Erro ao atualizar o pagamento: ' . $e->getMessage()], 500);
-        }
-
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $this->authorize('delete', Payment::class);
-    }
 }

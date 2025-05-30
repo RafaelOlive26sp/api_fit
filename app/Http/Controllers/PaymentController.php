@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\DTO\UpdatePaymentDTO;
+use App\DTO\StorePaymentDTO;
 
 use phpDocumentor\Reflection\Types\Boolean;
 use function Laravel\Prompts\select;
@@ -55,12 +56,13 @@ class PaymentController extends Controller
             $this->authorize('create', Payment::class);
             $student = $this->existsStudentWithId($id);
 
+            // Verifica se o aluno existe com o id passado somente admin pode passar o ID
             if (!$student) {
                 return response()->json(['message' => 'Usuário não concluiu o cadastro de aluno'], 404);
             }
+             
             $this->validateDataAndCreatePayment($request, $student->id);
             return response()->json(['message' => 'Pagamento criado com sucesso'], 201);
-
         }
         // se o id não for passado, verifica se o usuario logado é um aluno, se sim,
         // Para aluno logado
@@ -161,15 +163,18 @@ class PaymentController extends Controller
     }
     private function existsStudentWithId($id)
     {
+        
         $existingStudent = $this->studentQueryService->getStudentByUserId($id);
+        
         return $existingStudent;
     }
 
     private function validateDataAndCreatePayment(PaymentResquest $request, $userId)
     {
-        $validateData = $request->validated();
-        $validateData['students_id'] = $userId;
-        return Payment::create($validateData);
+        //verifica se o pagamento foi efetuado
+        $paymentDTO = StorePaymentDTO::fromRequest($request->validated());
+        $this->paymentService->store($paymentDTO);
+        
     }
 
 

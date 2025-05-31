@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class ScheduleClassesForClasses extends Controller
+class ScheduleClassesForClassesController extends Controller
 {
     use AuthorizesRequests;
     /**

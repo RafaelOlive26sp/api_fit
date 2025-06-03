@@ -14,14 +14,16 @@ use Illuminate\Http\Request;
 class ClassSheduleController extends Controller
 {
 
-    protected ClasseQueryService $classeQueryService;
-    protected ClassScheduleQueryService $classScheduleQueryService;
 
-    public function __construct(ClasseQueryService $classeQueryService, ClassScheduleQueryService $classScheduleQueryService)
-    {
-        $this->classeQueryService = $classeQueryService;
-        $this->classScheduleQueryService = $classScheduleQueryService;
-    }
+
+//    public function __construct( protected ClasseQueryService $classeQueryService,
+//                                protected ClassScheduleQueryService $classScheduleQueryService
+//    )
+//    {
+//
+//    }
+    public function __construct(protected ClasseQueryService $classeQueryService)
+    {}
 
     use AuthorizesRequests;
     /**
@@ -29,8 +31,10 @@ class ClassSheduleController extends Controller
      */
     public function index()
     {
+
         $this->authorize('viewAny', User::class);
         $classes = $this->classeQueryService->getAllClasses();
+
         return ClassScheduleResource::collection($classes);
     }
 

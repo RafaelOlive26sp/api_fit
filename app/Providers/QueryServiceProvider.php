@@ -15,6 +15,8 @@ class QueryServiceProvider extends ServiceProvider
         $this->app->singleton(UserQueryService::class);
         $this->app->singleton(StudentQueryService::class);
         $this->app->singleton(ClasseQueryService::class);
+        $this->app->singleton(ClassScheduleQueryService::class);
+        $this->app->singleton(PaymentQueryService::class);
 
     }
 

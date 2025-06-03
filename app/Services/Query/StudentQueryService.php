@@ -33,12 +33,12 @@ class StudentQueryService
     /**
      * Get student by user ID.
      *
-     * @param int $userId
+     * @param int $id
      * @return Student|null
      */
-    public function getStudentByUserId(int $userId): ?Student
+    public function getStudentByUserId(int $id): ?Student
     {
-        return Student::where('users_id', $userId)->first();
+        return Student::where('users_id', $id)->first();
     }
 
 }

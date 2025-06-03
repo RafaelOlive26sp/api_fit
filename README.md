@@ -6,12 +6,14 @@ Sistema completo de agendamento e gestão de aulas em grupo, desenvolvido com **
 
 ## 🚀 Demonstração
 
-🔗 **Front-end em produção**: [https://seusite.com](https://seusite.com)  
-🔗 **API em produção**: [https://suaapi.com](https://suaapi.com)  
-📦 **Repositório front-end Cliente**: [https://github.com/RafaelOlive26sp/newLanding](https://github.com/seunome/front-projeto)  
-📦 **Repositório back-end DashBoard**: [https://github.com/RafaelOlive26sp/dashTeacher_fit](https://github.com/seunome/front-projetods)
 
-📦 **Repositório back-end**: [https://github.com/RafaelOlive26sp/api_fit](https://github.com/seunome/front-projetods)
+🔗 **Front-end em produção Cliente**: [https://new-landing-seven.vercel.app/](https://new-landing-seven.vercel.app/)  
+🔗 **Front-end em produção DashBoard**: [https://dash-teacher-fit.vercel.app/login](https://dash-teacher-fit.vercel.app/login)  
+📦 **Repositório front-end Cliente**: [https://github.com/RafaelOlive26sp/newLanding](https://github.com/RafaelOlive26sp/newLanding)  
+📦 **Repositório front-end DashBoard**: [https://github.com/RafaelOlive26sp/dashTeacher_fit](https://github.com/RafaelOlive26sp/dashTeacher_fit)
+
+📦 **Repositório back-end Api**: [https://github.com/RafaelOlive26sp/api_fit](https://github.com/RafaelOlive26sp/api_fit)
+
 
 ---
 
@@ -57,11 +59,14 @@ O **FuncionalFit** oferece uma interface simples e poderosa para:
 
 - Organização da lógica com **Resource Controllers** no Laravel
 - Uso avançado de **Policies** para controle de acesso
-- Aplicação do conceito de SOLID, como SRP,DIP 
+
+- Aplicação do conceito de SOLID, como SRP,DIP
 - Criação de um **painel administrativo e responsivo** com Vuetify
 - Manipulação segura de **dados sensíveis e relacionamentos complexos** no banco de dados
 - Separação de responsabilidades entre front e API RESTful
-- Implantação full-stack com Railway (API) e RailWay (front)
+- Implantação full-stack com Railway (API) e Vercel (front)
+
+
 
 ---
 

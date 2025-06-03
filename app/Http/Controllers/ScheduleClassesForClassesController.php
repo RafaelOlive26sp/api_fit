@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ScheduleClassesForClassesRequest;
-//use App\Models\Appointment;
-use App\Models\ClassSchedulesPattern;
 use App\Services\ScheduleClassesFClassesService;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\DTO\ScheduleClassesFClassesDTO\StoreScheduleClassesDTO;
-
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ScheduleClassesForClassesController extends Controller

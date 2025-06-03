@@ -10,11 +10,9 @@ use App\Http\Resources\ScheduleShowClassResource;
 use App\Models\Student;
 use App\Models\StudentClass;
 use App\Models\User;
-use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\Request;
-
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use PhpParser\Builder;
+
 
 class ScheduleController extends Controller
 {

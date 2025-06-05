@@ -31,5 +31,5 @@ Route::post('clasregister',[ScheduleController::class,'store'])->middleware('aut
 Route::post('created/schedules/classes',[ScheduleClassesForClassesController::class,'store'])->middleware('auth:sanctum');
 
 });
-Route::post('v1/register',[UserController::class,'store']);
+Route::post('v1/register',[UserController::class,'store'])->middleware('throttle:1,2');
 Route::post('login', [AuthController::class, 'login']);

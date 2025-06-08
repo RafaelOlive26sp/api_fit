@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\ScheduleControllersDTO\StoreScheduleControllerDTO;
+use App\Services\ScheduleService;
 use App\Http\Requests\ScheduleClassRequest;
 use App\Http\Requests\UpdateScheduleRequest;
 
@@ -16,6 +18,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ScheduleController extends Controller
 {
+
+    public function __construct(
+        protected ScheduleService $ScheduleService,
+    ){}
     use AuthorizesRequests;
     /**
      * Display a listing of the resource.
@@ -44,13 +50,18 @@ class ScheduleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // Este Controller é responsável por agendar aulas para os alunos
     public function store(ScheduleClassRequest $request)
     {
-        $validateData = $request->validated();
-        // dd($validateData);
-        StudentClass::create($validateData);
-
+        $this->validateAndCreateSchedule($request->validated());
         return response()->json(['message' => 'Class Schedule with success'], 200);
+    }
+
+    private function validateAndCreateSchedule($request)
+    {
+        // Este método é responsável por validar e criar o agendamento de aulas
+        $DTO = StoreScheduleControllerDTO::fromRequest($request);
+        $this->ScheduleService->store($DTO);
     }
 
     /**

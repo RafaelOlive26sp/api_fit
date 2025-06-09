@@ -11,6 +11,7 @@ use App\Http\Controllers\StudentClassesController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckApplicationSource;
+use App\Http\Controllers\LogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,3 +34,5 @@ Route::post('created/schedules/classes',[ScheduleClassesForClassesController::cl
 });
 Route::post('v1/register',[UserController::class,'store'])->middleware('throttle:1,2');
 Route::post('login', [AuthController::class, 'login']);
+Route::post('/log-error', [LogController::class, 'store']);
+

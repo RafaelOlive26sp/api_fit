@@ -19,7 +19,11 @@ return [
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Especifica os métodos HTTP permitidos para requisições cross-origin.
 
-    'allowed_origins' => ['*'], // Define quais origens (domínios) podem acessar os recursos. '*' permite todas as origens.
+    'allowed_origins' => [
+        'https://dash-teacher-fit.vercel.app',
+        'https://new-landing-seven.vercel.app',
+        'http://localhost:3000', 
+    ], // Define quais origens (domínios) podem acessar os recursos. '*' permite todas as origens.
 
     'allowed_origins_patterns' => ['*'], // Permite especificar padrões de origens usando expressões regulares. '*' permite todas as origens.
 
@@ -33,3 +37,5 @@ return [
     'supports_credentials' => false, // Indica se as credenciais (cookies, cabeçalhos de autenticação) são suportadas em requisições cross-origin.
 
 ];
+
+

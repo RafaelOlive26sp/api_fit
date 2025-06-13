@@ -34,5 +34,5 @@ Route::post('created/schedules/classes',[ScheduleClassesForClassesController::cl
 });
 Route::post('v1/register',[UserController::class,'store'])->middleware('throttle:1,2');
 Route::post('login', [AuthController::class, 'login']);
-Route::post('/log-error', [LogController::class, 'store']);
+
 

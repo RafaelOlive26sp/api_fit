@@ -110,6 +110,12 @@ class ScheduleController extends Controller
         // Atualiza os dados
         $studentClass->update($validatedData);
 
+        // Dispara o evento de broadcast
+        event(new StudentMovedToClass(
+            $validatedData['students_id'],
+            $studentClass->class_schedules_id
+        ));
+
         return response()->json(['message' => 'Class Schedule updated with success'], 200);
     }
 

@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'], // Define os caminhos que serão afetados pelas configurações de CORS.
+    'paths' => ['api/*', 'sanctum/csrf-cookie','broadcasting/auth'], // Define os caminhos que serão afetados pelas configurações de CORS.
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Especifica os métodos HTTP permitidos para requisições cross-origin.
 
@@ -35,7 +35,7 @@ return [
 
     'max_age' => 0, // Especifica o tempo em segundos que o navegador deve armazenar em cache a resposta do preflight request.
 
-    'supports_credentials' => false, // Indica se as credenciais (cookies, cabeçalhos de autenticação) são suportadas em requisições cross-origin.
+    'supports_credentials' => true, // Indica se as credenciais (cookies, cabeçalhos de autenticação) são suportadas em requisições cross-origin.
 
 ];
 

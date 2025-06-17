@@ -116,8 +116,8 @@ class ScheduleController extends Controller
 
         // Notifica o usuário
         $user->notify(new NewMessageNotification([
-            'status' => 'success',
-            'body' => 'Aula agendada com sucesso!'
+            'status' => 'info',
+            'body' => 'Seu processor mudou voçe de turma!'
         ]));
 
 

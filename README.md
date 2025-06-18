@@ -58,7 +58,9 @@ Com o **FuncionalFit**, é possível:
 
 ---
 ### 📚 Nota de Desenvolvimento
+
 > Este módulo está em desenvolvimento ativo como parte do processo de aprendizado e implementação de WebSockets. Estamos explorando e expandindo os recursos gradualmente para garantir uma implementação robusta e eficiente.
+
 
 ---
 

@@ -1,59 +1,60 @@
 # 📅 FuncionalFit – Sistema de Agendamento de Aulas Funcionais
 
-Sistema completo de agendamento e gestão de aulas em grupo, desenvolvido com **Laravel (API)** e **Vue 3 + Vuetify (front-end)**, pensado para **professores de funcional** que querem organizar suas turmas com praticidade, atenção individualizada e foco na experiência do aluno.
+Sistema completo de agendamento e gestão de aulas em grupo, desenvolvido com **Laravel (API)** e **Vue 3 + Vuetify (front-end)**. Ideal para **professores de funcional** que desejam organizar suas turmas com praticidade, atenção individualizada e foco na experiência do aluno.
 
 ---
 
 ## 🚀 Demonstração
 
+🔗 **Front-end (Cliente)**  
+[https://new-landing-seven.vercel.app/](https://new-landing-seven.vercel.app/)
 
-🔗 **Front-end em produção Cliente**: [https://new-landing-seven.vercel.app/](https://new-landing-seven.vercel.app/)  
-🔗 **Front-end em produção DashBoard**: [https://dash-teacher-fit.vercel.app/login](https://dash-teacher-fit.vercel.app/login)  
-📦 **Repositório front-end Cliente**: [https://github.com/RafaelOlive26sp/newLanding](https://github.com/RafaelOlive26sp/newLanding)  
-📦 **Repositório front-end DashBoard**: [https://github.com/RafaelOlive26sp/dashTeacher_fit](https://github.com/RafaelOlive26sp/dashTeacher_fit)
+🔗 **Front-end (Dashboard)**  
+[https://dash-teacher-fit.vercel.app/login](https://dash-teacher-fit.vercel.app/login)
 
-📦 **Repositório back-end Api**: [https://github.com/RafaelOlive26sp/api_fit](https://github.com/RafaelOlive26sp/api_fit)
-
+📦 **Repositórios**
+- 💻 [Front-end Cliente](https://github.com/RafaelOlive26sp/newLanding)
+- 💼 [Front-end DashBoard](https://github.com/RafaelOlive26sp/dashTeacher_fit)
+- 🔙 [Back-end API](https://github.com/RafaelOlive26sp/api_fit)
 
 ---
 
-## 🎯 Problema que o sistema resolve
+## 🎯 Problema
 
-Muitos professores de funcional ainda usam **WhatsApp e planilhas manuais** para organizar agendamentos, controlar pagamentos e lidar com faltas ou reagendamentos. Isso gera confusão, perda de dados e muito retrabalho.
+Professores de funcional ainda dependem de **WhatsApp, cadernos ou planilhas manuais** para controlar agendamentos, pagamentos e presenças — o que gera confusão, perda de dados e retrabalho.
 
 ---
 
 ## 💡 Solução
 
-O **FuncionalFit** oferece uma interface simples e poderosa para:
+Com o **FuncionalFit**, é possível:
 
 - 📋 Cadastrar alunos com histórico físico e dados médicos
-- 🗓️ Gerenciar horários semanais com regras de presença e faltas
-- 👨‍🏫 Organizar turmas de até 5 alunos por nível de condicionamento
-- 💰 Acompanhar pagamentos mensais
-- 📊 Gerar relatórios por aluno, turma e mês
-- 🔐 Controlar permissões com autenticação e políticas de acesso
+- 🗓️ Gerenciar horários semanais com controle de faltas e presença
+- 👥 Organizar turmas de até 5 alunos, divididas por nível
+- 💰 Acompanhar mensalidades e pagamentos
+- 📊 Gerar relatórios por aluno, turma e período
+- 🔐 Controlar permissões com autenticação segura e policies
 
 ---
 
-## 🛠️ Tecnologias utilizadas
+## ⚙️ Tecnologias
 
-### Back-end (Laravel)
+### 🔧 Back-end (Laravel)
 - Laravel 11
-- Sanctum (autenticação)
-- Policies e Form Requests
+- Sanctum (auth)
+- Policies & Form Requests
 - MySQL
 - Migrations + Seeders
 - Laravel Reverb (WebSocket)
 - Deploy: Railway
 
-
-### Front-end (Vue 3)
-- Vue 3 (Composition API)
-- Vue Router & Vuex
-- Vuetify 3 (UI)
+### 🎨 Front-end (Vue 3)
+- Vue.js 3
+- Vuetify 3
+- Vue Router
 - Axios
-- Deploy: RailWay
+- Deploy: Vercel
 
 ---
 ### 📚 Nota de Desenvolvimento
@@ -74,14 +75,39 @@ O FuncionalFit implementa comunicação em tempo real usando Laravel Reverb para
     - [ ] Alertas de cancelamento de aula
     - [ ] Comunicação em tempo real entre professor e aluno
 
-### 🛠️ Configuração WebSocket
+### 🛠️ Configuração WebSocket e Sistema de Filas
 
+```bash
 # Instalação do Reverb
 composer require laravel/reverb
+
 # Configuração do ambiente (.env)
-REVERB_APP_ID=seu_app_id REVERB_APP_KEY=sua_app_key REVERB_APP_SECRET=seu_app_secret
+REVERB_APP_ID=seu_app_id
+REVERB_APP_KEY=sua_app_key
+REVERB_APP_SECRET=seu_app_secret
+
 # Iniciar servidor WebSocket
 php artisan reverb:start
+
+# Em outro terminal, iniciar o worker das filas
+php artisan queue:work
+```
+
+> **⚠️ Importante**: O sistema utiliza dois processos que precisam estar rodando simultaneamente:
+> 1. `reverb:start` - Servidor WebSocket para comunicação em tempo real
+> 2. `queue:work` - Worker responsável por processar jobs em segundo plano, utilizando o driver `database` (MySQL). Ele consome os jobs da tabela `jobs`, executa a lógica associada (como disparar eventos WebSocket) e os remove após a execução bem-sucedida.
+
+>
+### 📝 Nota sobre o Sistema de Filas
+Atualmente, o projeto utiliza o banco de dados MySQL como driver para o sistema de filas. Esta é uma configuração inicial que atende às necessidades atuais do projeto. Está nos planos futuros avaliar e possivelmente migrar para soluções mais robustas como Redis, que pode oferecer melhor performance em determinados cenários de uso.
+#### Configuração Atual das Filas:
+- **Driver**: Database (MySQL)
+- **Tabelas**: `jobs` e `failed_jobs`
+- **Futuras Melhorias Planejadas**:
+    - [ ] Estudo e possível implementação do Redis
+    - [ ] Otimização do processamento de filas
+    - [ ] Implementação de monitoramento avançado de jobs
+
 
 ## 🧪 Próximos passos
 

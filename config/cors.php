@@ -35,7 +35,7 @@ return [
 
     'max_age' => 0, // Especifica o tempo em segundos que o navegador deve armazenar em cache a resposta do preflight request.
 
-    'supports_credentials' => true, // Indica se as credenciais (cookies, cabeçalhos de autenticação) são suportadas em requisições cross-origin.
+    'supports_credentials' => false, // Indica se as credenciais (cookies, cabeçalhos de autenticação) são suportadas em requisições cross-origin.
 
 ];
 

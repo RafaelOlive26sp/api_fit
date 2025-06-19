@@ -6,7 +6,7 @@ use App\DTO\ScheduleControllersDTO\StoreScheduleControllerDTO;
 use App\Services\ScheduleService;
 use App\Http\Requests\ScheduleClassRequest;
 use App\Http\Requests\UpdateScheduleRequest;
-use App\Notifications\NewMessageNotification;
+use App\Notifications\newNotificationStudent;
 
 use App\Http\Resources\ScheduleClassResource;
 use App\Http\Resources\ScheduleShowClassResource;
@@ -109,9 +109,13 @@ class ScheduleController extends Controller
 
 
         // Atualiza os dados
+
         $studentClass->update($validatedData);
-        // Envia notificação para o usuário
-        $user->notify(new NewMessageNotification([
+        // Busca o usuário relacionado (exemplo, ajuste para sua estrutura real)
+        $user = $studentClass->student->user;
+
+        // Notifica o usuário
+        $user->notify(new newNotificationStudent([
             'status' => 'info',
             'body' => 'Seu processor mudou voçe de turma!'
         ]));

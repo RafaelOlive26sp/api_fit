@@ -14,6 +14,7 @@ use App\Http\Middleware\CheckApplicationSource;
 use App\Http\Controllers\LogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
 
 Route::prefix('v1')->group(function (){
 Route::resource('users', UserController::class)->middleware('auth:sanctum');
@@ -34,5 +35,7 @@ Route::post('created/schedules/classes',[ScheduleClassesForClassesController::cl
 });
 Route::post('v1/register',[UserController::class,'store'])->middleware('throttle:1,2');
 Route::post('login', [AuthController::class, 'login']);
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 

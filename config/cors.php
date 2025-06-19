@@ -22,7 +22,6 @@ return [
     'allowed_origins' => [
         'https://dash-teacher-fit.vercel.app',
         'https://new-landing-seven.vercel.app',
-
         'http://localhost:3000',
         'http://localhost:3001',
 

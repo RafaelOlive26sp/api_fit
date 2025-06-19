@@ -15,6 +15,7 @@ use App\Models\StudentClass;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Notifications\NewMessageNotification;
 
 
 class ScheduleController extends Controller
@@ -119,6 +120,16 @@ class ScheduleController extends Controller
             'status' => 'info',
             'body' => 'Seu processor mudou voçe de turma!'
         ]));
+
+        // Busca o usuário relacionado (exemplo, ajuste para sua estrutura real)
+        $user = $studentClass->student->user;
+
+        // Notifica o usuário
+        $user->notify(new NewMessageNotification([
+            'status' => 'info',
+            'body' => 'Seu processor mudou voçe de turma!'
+        ]));
+
 
         return response()->json(['message' => 'Class Schedule updated with success'], 200);
     }

@@ -2,14 +2,18 @@
 
 namespace App\Notifications;
 
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\SerializesModels;
+
 
 class newNotificationStudent extends Notification implements ShouldBroadcast
 {
-     use Queueable, Dispatchable, InteractsWithSockets, SerializesModels; 
+     use Queueable, Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new notification instance.
@@ -18,7 +22,7 @@ class newNotificationStudent extends Notification implements ShouldBroadcast
     {
         //
     }
-    
+
 
     /**
      * Get the notification's delivery channels.

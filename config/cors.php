@@ -17,7 +17,7 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie','broadcasting/auth'], // Define os caminhos que serão afetados pelas configurações de CORS.
 
-    'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Especifica os métodos HTTP permitidos para requisições cross-origin.
+    'allowed_methods' => ['GET', 'POST', 'PUT','PATCH', 'DELETE', 'OPTIONS'], // Especifica os métodos HTTP permitidos para requisições cross-origin.
 
     'allowed_origins' => [
         'https://dash-teacher-fit.vercel.app',
@@ -28,7 +28,7 @@ return [
 
     ], // Define quais origens (domínios) podem acessar os recursos. '*' permite todas as origens.
 
-    'allowed_origins_patterns' => ['*'], // Permite especificar padrões de origens usando expressões regulares. '*' permite todas as origens.
+    'allowed_origins_patterns' => [], // Permite especificar padrões de origens usando expressões regulares. '*' permite todas as origens.
 
     'allowed_headers' => ['Accept', 'Authorization', 'Content-Type', 'X-Requested-With', 'X-CSRF-TOKEN', 'X-Application-Source'],
     // Lista os cabeçalhos HTTP permitidos nas requisições.

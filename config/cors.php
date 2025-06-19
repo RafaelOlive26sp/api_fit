@@ -15,15 +15,15 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie','broadcasting/auth'], // Define os caminhos que serão afetados pelas configurações de CORS.
+    'paths' => ['api/*', 'sanctum/csrf-cookie'], // Define os caminhos que serão afetados pelas configurações de CORS.
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Especifica os métodos HTTP permitidos para requisições cross-origin.
 
     'allowed_origins' => [
         'https://dash-teacher-fit.vercel.app',
         'https://new-landing-seven.vercel.app',
-        'http://localhost:3000',
-        'http://localhost:3001',
+        // 'http://localhost:3000',
+        // 'http://localhost:3001',
     ], // Define quais origens (domínios) podem acessar os recursos. '*' permite todas as origens.
 
     'allowed_origins_patterns' => ['*'], // Permite especificar padrões de origens usando expressões regulares. '*' permite todas as origens.

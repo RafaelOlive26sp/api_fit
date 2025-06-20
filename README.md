@@ -46,7 +46,7 @@ Com o **FuncionalFit**, é possível:
 - Policies & Form Requests
 - MySQL
 - Migrations + Seeders
-- Laravel Reverb (WebSocket)
+- Pusher (WebSocket)
 - Deploy: Railway
 
 ### 🎨 Front-end (Vue 3)
@@ -54,6 +54,7 @@ Com o **FuncionalFit**, é possível:
 - Vuetify 3
 - Vue Router
 - Axios
+- Pusher JS
 - Deploy: Vercel
 
 ---
@@ -61,56 +62,63 @@ Com o **FuncionalFit**, é possível:
 
 > Este módulo está em desenvolvimento ativo como parte do processo de aprendizado e implementação de WebSockets. Estamos explorando e expandindo os recursos gradualmente para garantir uma implementação robusta e eficiente.
 
-
 ---
 
-
-## 🔌 WebSocket com Laravel Reverb
+## 🔌 WebSocket com Pusher
 
 ### 📡 Visão Geral
-O FuncionalFit implementa comunicação em tempo real usando Laravel Reverb para proporcionar uma experiência mais dinâmica e interativa aos usuários.
+O FuncionalFit implementa comunicação em tempo real usando **Pusher** para proporcionar uma experiência mais dinâmica e interativa aos usuários, garantindo notificações instantâneas e atualizações em tempo real.
 
 ### ⚡ Funcionalidades em Tempo Real
+- **Notificações Privadas**: Sistema de canais privados para notificações direcionadas a usuários específicos
 - **Notificações de Turma**: Alunos recebem atualizações instantâneas quando professores modificam informações da turma
-- **Em Desenvolvimento**:
-    - [ ] Notificações de pagamento
-    - [ ] Alertas de cancelamento de aula
-    - [ ] Comunicação em tempo real entre professor e aluno
+- **Comunicação Segura**: Autenticação de canais privados garantindo que apenas usuários autorizados recebam notificações específicas
 
-### 🛠️ Configuração WebSocket e Sistema de Filas
+### 🔐 Canais Privados
+O sistema utiliza **canais privados do Pusher** para garantir que as notificações sejam entregues apenas aos usuários corretos:
+- `private-user.{user_id}` - Canal privado para notificações específicas do usuário
+- `private-class.{class_id}` - Canal privado para atualizações de turma específica
+- Sistema de autorização customizado no Laravel para validar acesso aos canais
+
+## 🔑 Obtendo as Credenciais do Pusher
+
+Para utilizar o Pusher, você precisa criar uma conta e obter as credenciais necessárias:
+
+1. **Criar Conta**: Acesse [https://pusher.com/](https://pusher.com/) e crie uma conta gratuita
+2. **Criar Aplicação**: No dashboard, clique em "Create App"
+3. **Configurar Aplicação**:
+- **App Name**: Nome da sua aplicação (ex: FuncionalFit)
+- **Cluster**: Escolha o cluster mais próximo (ex: `mt1` para América do Sul)
+- **Tech Stack**: Selecione "Laravel" como backend e "Vue.js" como frontend
+4. **Obter Credenciais**: Na aba "App Keys", você encontrará:
+- `app_id` - ID único da aplicação
+- `key` - Chave pública (usada no frontend)
+- `secret` - Chave secreta (usada no backend)
+- `cluster` - Região do servidor
+
+> 📋 **Plano Gratuito**: O Pusher oferece até 200.000 mensagens/dia e 100 conexões simultâneas no plano gratuito, suficiente para desenvolvimento e pequenos projetos.
+
+### Configuração do Ambiente (.env)
+
+### 🛠️ Configuração WebSocket
 
 ```bash
-# Instalação do Reverb
-composer require laravel/reverb
+
+# Instalação do Pusher
+composer require pusher/pusher-php-server
 
 # Configuração do ambiente (.env)
-REVERB_APP_ID=seu_app_id
-REVERB_APP_KEY=sua_app_key
-REVERB_APP_SECRET=seu_app_secret
 
-# Iniciar servidor WebSocket
-php artisan reverb:start
+BROADCAST_DRIVER=pusher
+PUSHER_APP_ID=seu_pusher_app_id
+PUSHER_APP_KEY=sua_pusher_app_key
+PUSHER_APP_SECRET=seu_pusher_app_secret
+PUSHER_HOST=
+PUSHER_PORT=443
+PUSHER_SCHEME=https
+PUSHER_APP_CLUSTER=mt1
 
-# Em outro terminal, iniciar o worker das filas
-php artisan queue:work
 ```
-
-> **⚠️ Importante**: O sistema utiliza dois processos que precisam estar rodando simultaneamente:
-> 1. `reverb:start` - Servidor WebSocket para comunicação em tempo real
-> 2. `queue:work` - Worker responsável por processar jobs em segundo plano, utilizando o driver `database` (MySQL). Ele consome os jobs da tabela `jobs`, executa a lógica associada (como disparar eventos WebSocket) e os remove após a execução bem-sucedida.
-
->
-### 📝 Nota sobre o Sistema de Filas
-Atualmente, o projeto utiliza o banco de dados MySQL como driver para o sistema de filas. Esta é uma configuração inicial que atende às necessidades atuais do projeto. Está nos planos futuros avaliar e possivelmente migrar para soluções mais robustas como Redis, que pode oferecer melhor performance em determinados cenários de uso.
-#### Configuração Atual das Filas:
-- **Driver**: Database (MySQL)
-- **Tabelas**: `jobs` e `failed_jobs`
-- **Futuras Melhorias Planejadas**:
-    - [ ] Estudo e possível implementação do Redis
-    - [ ] Otimização do processamento de filas
-    - [ ] Implementação de monitoramento avançado de jobs
-
-
 ## 🧪 Próximos passos
 
 - [ ] Área para reagendamento por parte do aluno
@@ -134,7 +142,7 @@ Atualmente, o projeto utiliza o banco de dados MySQL como driver para o sistema 
 - Separação de responsabilidades entre front e API RESTful
 - Implantação full-stack com Railway (API) e Vercel (front)
 - **Implementação de WebSockets** para comunicação em tempo real
-- Gerenciamento de eventos e canais com Laravel Reverb
+- Gerenciamento de eventos e canais com Pusher
 
 
 
